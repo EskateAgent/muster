@@ -14,7 +14,7 @@ class AddSlugToLeagues extends Migration {
   {
     Schema::table('leagues', function(Blueprint $table)
     {
-      $table->string('slug')->default('');
+      $table->string('slug')->default('')->unique();
     });
   }
 
