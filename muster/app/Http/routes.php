@@ -12,10 +12,15 @@
 */
 
 Route::get('/', 'WelcomeController@index');
-
 Route::get('home', 'HomeController@index');
 
+Route::model('leagues', 'Leagues');
+Route::resource('leagues', 'LeaguesController');
+Route::bind('leagues', function( $value, $route ){
+  return App\League::whereSlug( $value )->first();
+});
+
 Route::controllers([
-	'auth' => 'Auth\AuthController',
-	'password' => 'Auth\PasswordController',
+  'auth'     => 'Auth\AuthController',
+  'password' => 'Auth\PasswordController',
 ]);

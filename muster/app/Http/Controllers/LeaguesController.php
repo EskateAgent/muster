@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers;
 
+use App\League;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -14,7 +15,8 @@ class LeaguesController extends Controller {
    */
   public function index()
   {
-    //
+    $leagues = League::all();
+    return view('leagues.index', compact('leagues') );
   }
 
   /**
@@ -24,7 +26,7 @@ class LeaguesController extends Controller {
    */
   public function create()
   {
-    //
+    return view('leagues.create');
   }
 
   /**
@@ -40,32 +42,32 @@ class LeaguesController extends Controller {
   /**
    * Display the specified resource.
    *
-   * @param  int  $id
+   * @param  League $league
    * @return Response
    */
-  public function show($id)
+  public function show( League $league )
   {
-    //
+    return view('leagues.show', compact('league') );
   }
 
   /**
    * Show the form for editing the specified resource.
    *
-   * @param  int  $id
+   * @param  League $league
    * @return Response
    */
-  public function edit($id)
+  public function edit( League $league )
   {
-    //
+    return view('leagues.edit', compact('league') );
   }
 
   /**
    * Update the specified resource in storage.
    *
-   * @param  int  $id
+   * @param  League $league
    * @return Response
    */
-  public function update($id)
+  public function update( League $league )
   {
     //
   }
@@ -73,10 +75,10 @@ class LeaguesController extends Controller {
   /**
    * Remove the specified resource from storage.
    *
-   * @param  int  $id
+   * @param  League $league
    * @return Response
    */
-  public function destroy($id)
+  public function destroy( League $league )
   {
     //
   }
