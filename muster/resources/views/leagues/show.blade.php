@@ -9,7 +9,7 @@
   @else
     <ul>
       @foreach( $league->charters as $charter )
-        <li><a href="{{ route('leagues.charters.show', [$league->slug, $charter->id]) }}">{{ $charter->created_at }}</a></li>
+        <li><a href="{{ route('leagues.charters.show', [ $league->slug, $charter->slug ] ) }}">{{ $charter->name }}</a></li>
       @endforeach
     </ul>
   @endif
