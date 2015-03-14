@@ -14,11 +14,14 @@
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
 
-Route::model('leagues', 'Leagues');
+Route::model('leagues', 'League');
 Route::resource('leagues', 'LeaguesController');
 Route::bind('leagues', function( $value, $route ){
   return App\League::whereSlug( $value )->first();
 });
+
+Route::model('leagues.charters', 'Charter');
+Route::resource('leagues.charters', 'ChartersController');
 
 Route::controllers([
   'auth'     => 'Auth\AuthController',
