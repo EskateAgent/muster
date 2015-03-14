@@ -9,7 +9,7 @@
     <ul>
       @foreach( $leagues as $league )
         <li>
-          {{ $league->name }}:
+          <a href="{{ route('leagues.show', [ $league->slug ] ) }}">{{ $league->name }}</a>:
           @if( $charter = $league->currentCharter() )
             <a href="{{ route('leagues.charters.show', [ $league->slug, $charter->slug ] ) }}">{{ $charter->name }}</a>
           @else

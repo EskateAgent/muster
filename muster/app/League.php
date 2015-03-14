@@ -9,9 +9,19 @@ class League extends Model {
     return $this->hasMany('App\Charter');
   }
 
+  public function approvedCharters()
+  {
+    return $this->charters()->whereNotNull('approved_at')->orderBy('approved_at', 'desc');
+  }
+
   public function currentCharter()
   {
-    return $this->charters()->whereNotNull('approved_at')->orderBy('approved_at')->first();
+    return $this->approvedCharters->first();
+  }
+
+  public function historicalCharters()
+  {
+    return $this->approvedCharters()->take(100)->skip(1)->get();
   }
 
 }
