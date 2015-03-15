@@ -4,7 +4,7 @@
   <h2><a href="{{ route('leagues.show', [ $league->slug ] ) }}">{{ $league->name }}</a> - {{ $charter->name }}</h2>
 
   <h3>Skaters</h3>
-  @if( !$charter->skaters()->count() )
+  @if( !$charter->skaters->count() )
     <p>{{ $charter->name }} contains no skaters.</p>
   @else
     <table>
@@ -17,7 +17,7 @@
       </thead>
       <tbody>
         <?php $i = 1; ?>
-        @foreach( $charter->skaters() as $skater )
+        @foreach( $charter->skaters as $skater )
           <tr>
             <td>{{ $i }}</td>
             <td>{{ $skater->name }}</td>
