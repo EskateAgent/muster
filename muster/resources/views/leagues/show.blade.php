@@ -5,7 +5,7 @@
 
   <h3>Charters</h3>
   @if( !$league->charters->count() )
-    {{ $league->name }} has no charters.
+    {{ $league->name }} has not submitted any charters.
   @else
     @if( $current = $league->currentCharter() )
       <h4>Current</h4>
