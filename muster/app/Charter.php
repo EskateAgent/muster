@@ -9,4 +9,9 @@ class Charter extends Model {
     return $this->belongsTo('App\League');
   }
 
+  public function skaters()
+  {
+    return $this->hasMany('App\Skater');
+  }
+
 }
