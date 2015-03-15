@@ -6,6 +6,7 @@ Muster is a web application for UKRDA Member Leagues and administration staff to
 - user access
  - role-based permissions
  - league logins
+- 404
 - search
 - g-ewwwwww-i (gui)
 - WFTDA-format csv upload and processing
