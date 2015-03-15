@@ -19,6 +19,11 @@ class League extends Model {
     return $this->approvedCharters->first();
   }
 
+  public function draftCharter()
+  {
+    return $this->charters()->whereNull('approved_at')->first();
+  }
+
   public function historicalCharters()
   {
     return $this->approvedCharters()->take(100)->skip(1)->get();

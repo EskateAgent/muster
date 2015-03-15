@@ -7,6 +7,11 @@
   @if( !$league->charters->count() )
     {{ $league->name }} has not submitted any charters.
   @else
+    @if( $draft = $league->draftCharter() )
+      <h4>Draft</h4>
+      <p><a href="{{ route('leagues.charters.show', [ $league->slug, $draft->slug ] ) }}">{{ $draft->name }}</a></p>
+    @endif
+
     @if( $current = $league->currentCharter() )
       <h4>Current</h4>
       <p><a href="{{ route('leagues.charters.show', [ $league->slug, $current->slug ] ) }}">{{ $current->name }}</a></p>
