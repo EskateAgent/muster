@@ -22,6 +22,9 @@ Route::bind('leagues', function( $value, $route ){
 
 Route::model('leagues.charters', 'Charter');
 Route::resource('leagues.charters', 'ChartersController');
+Route::bind('charters', function( $value, $route ){
+  return App\Charter::whereSlug( $value )->first();
+});
 
 Route::controllers([
   'auth'     => 'Auth\AuthController',

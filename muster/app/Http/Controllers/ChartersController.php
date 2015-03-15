@@ -49,6 +49,10 @@ class ChartersController extends Controller {
    */
   public function show( League $league, Charter $charter )
   {
+    if( $charter->league != $league )
+    {
+      // mismatch, what are you doing crazyperson?
+    }
     return view('charters.show', compact('league', 'charter') );
   }
 
