@@ -6,7 +6,7 @@ class League extends Model {
 
   public function charters()
   {
-    return $this->hasMany('App\Charter');
+    return $this->hasMany('App\Charter')->limit(20);
   }
 
   public function approvedCharters()
@@ -26,7 +26,7 @@ class League extends Model {
 
   public function historicalCharters()
   {
-    return $this->approvedCharters()->take(100)->skip(1)->get();
+    return $this->approvedCharters()->take(10)->skip(1)->get();
   }
 
 }

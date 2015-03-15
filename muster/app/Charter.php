@@ -11,7 +11,7 @@ class Charter extends Model {
 
   public function skaters()
   {
-    return $this->hasMany('App\Skater');
+    return $this->hasMany('App\Skater')->limit(20);
   }
 
 }
