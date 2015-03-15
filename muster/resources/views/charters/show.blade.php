@@ -7,11 +7,26 @@
   @if( !$charter->skaters()->count() )
     <p>{{ $charter->name }} contains no skaters.</p>
   @else
-    <ul>
-      @foreach( $charter->skaters() as $skater )
-        <li>{{ $skater->name }}</li>
-      @endforeach
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Number</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php $i = 1; ?>
+        @foreach( $charter->skaters() as $skater )
+          <tr>
+            <td>{{ $i }}</td>
+            <td>{{ $skater->name }}</td>
+            <td>{{ $skater->number }}</td>
+          </tr>
+        <?php $i++; ?>
+        @endforeach
+      </tbody>
+    </table>
   @endif
 
 @endsection
