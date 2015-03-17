@@ -16,7 +16,7 @@ class League extends Model {
 
   public function currentCharter()
   {
-    return $this->approvedCharters->first();
+    return $this->approvedCharters()->first();
   }
 
   public function draftCharter()

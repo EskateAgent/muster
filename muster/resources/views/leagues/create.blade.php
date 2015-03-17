@@ -1,5 +1,9 @@
 @extends('app')
 
 @section('content')
-  create
+
+{!! Form::open(array('url' => 'foo/bar')) !!}
+  //
+{!! Form::close() !!}
+
 @endsection
