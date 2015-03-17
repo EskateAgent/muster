@@ -10,6 +10,11 @@ use Illuminate\Http\Request;
 
 class LeaguesController extends Controller {
 
+  protected $rules = [
+    'name' => ['required', 'min:3'],
+    'slug' => ['required'],
+  ];
+
   /**
    * Display a listing of the resource.
    *
@@ -36,8 +41,10 @@ class LeaguesController extends Controller {
    *
    * @return Response
    */
-  public function store()
+  public function store( Request $request )
   {
+    $this->validate( $request, $this->rules );
+
     League::create( Input::all() );
     return Redirect::route('leagues.index')->with('message', 'League created');
   }
@@ -72,6 +79,8 @@ class LeaguesController extends Controller {
    */
   public function update( League $league )
   {
+    $this->validate( $request, $this->rules );
+
     $league->update( array_except( Input::all(), '_method') );
     return Redirect::route('leagues.show', $league->slug )->with('message', 'League updated');
   }

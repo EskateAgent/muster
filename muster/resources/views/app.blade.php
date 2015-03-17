@@ -57,6 +57,14 @@
       </div>
     @endif
 
+    @if( $errors->any() )
+      <div class='flash alert-danger'>
+        @foreach( $errors->all() as $error )
+          <p>{{ $error }}</p>
+        @endforeach
+      </div>
+    @endif
+
     @yield('content')
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
