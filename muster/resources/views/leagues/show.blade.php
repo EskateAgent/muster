@@ -5,6 +5,7 @@
   <a href="{{ route('leagues.edit', [ $league->slug ] ) }}">edit</a>
 
   <h3>Charters</h3>
+  <p><a href="{{ route('leagues.charters.create', [ $league->slug ] ) }}">create new</a>
   @if( !$league->charters->count() )
     {{ $league->name }} has not submitted any charters.
   @else

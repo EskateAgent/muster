@@ -39,6 +39,7 @@ class LeaguesController extends Controller {
   /**
    * Store a newly created resource in storage.
    *
+   * @param  Request $request
    * @return Response
    */
   public function store( Request $request )
@@ -75,9 +76,10 @@ class LeaguesController extends Controller {
    * Update the specified resource in storage.
    *
    * @param  League $league
+   * @param  Request $request
    * @return Response
    */
-  public function update( League $league )
+  public function update( League $league, Request $request )
   {
     $this->validate( $request, $this->rules );
 
