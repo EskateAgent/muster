@@ -3,6 +3,8 @@
 use App\League;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Input;
+use Redirect;
 
 use Illuminate\Http\Request;
 
@@ -36,7 +38,8 @@ class LeaguesController extends Controller {
    */
   public function store()
   {
-    //
+    League::create( Input::all() );
+    return Redirect::route('leagues.index')->with('message', 'League created');
   }
 
   /**
@@ -69,7 +72,8 @@ class LeaguesController extends Controller {
    */
   public function update( League $league )
   {
-    //
+    $league->update( array_except( Input::all(), '_method') );
+    return Redirect::route('leagues.show', $league->slug )->with('message', 'League updated');
   }
 
   /**

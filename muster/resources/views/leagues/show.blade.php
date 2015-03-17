@@ -2,6 +2,7 @@
 
 @section('content')
   <h2>{{ $league->name }}</h2>
+  <a href="{{ route('leagues.edit', [ $league->slug ] ) }}">edit</a>
 
   <h3>Charters</h3>
   @if( !$league->charters->count() )

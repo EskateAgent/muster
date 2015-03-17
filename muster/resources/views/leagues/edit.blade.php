@@ -2,7 +2,7 @@
 
 @section('content')
 
-{!! Form::model( new App\League, ['route' => ['leagues.store'] ]) !!}
+{!! Form::model( $league, ['method' => 'PATCH', 'route' => ['leagues.update', $league->slug] ] ) !!}
   @include('leagues/partials/_form')
 {!! Form::close() !!}
 

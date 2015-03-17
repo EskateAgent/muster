@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class League extends Model {
 
+  protected $guarded = [];
+
   public function charters()
   {
     return $this->hasMany('App\Charter')->limit(20);
