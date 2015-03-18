@@ -10,6 +10,7 @@ Muster is a web application for UKRDA Member Leagues and administration staff to
  - role-based permissions
  - league logins
 - g-ewwwwww-i (gui)
+- support for alternative consumption methods (json, rdf, xml)
 - 404
 - search
 - sitemap
