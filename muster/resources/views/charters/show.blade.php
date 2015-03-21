@@ -2,6 +2,9 @@
 
 @section('content')
   <h2><a href="{{ route('leagues.show', [ $league->slug ] ) }}">{{ $league->name }}</a> - {{ $charter->name }}</h2>
+  @if( !$charter->approvedAt )
+    <p><a href="{{ route('leagues.charters.edit', [ $league->slug, $charter->slug ] ) }}">upload a new revision</a></p>
+  @endif
 
   <h3>Skaters</h3>
   @if( !$charter->skaters->count() )
