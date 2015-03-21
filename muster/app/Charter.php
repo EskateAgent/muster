@@ -16,4 +16,22 @@ class Charter extends Model {
     return $this->hasMany('App\Skater')->limit(20);
   }
 
+  public function replaceSkaters( array $skaters )
+  {
+    if( count( $this->skaters ) )
+    {
+      foreach( $this->skaters as $skater )
+      {
+        $skater->delete();
+      }
+    }
+
+    if( count( $skaters ) )
+    {
+      foreach( $skaters as $skater )
+      {
+        Skater::create( array_merge( $skater, array('charter_id' => $this->id ) ) );
+      }
+    }
+  }
 }

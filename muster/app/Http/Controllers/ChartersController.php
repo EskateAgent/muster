@@ -53,9 +53,7 @@ class ChartersController extends Controller {
 
     $charter = Charter::create( array_merge( Input::all(), array('league_id' => $league->id ) ) );
 
-    $skaters = $this->processFile( $request );
-
-    $this->replaceCharterSkaters( $charter, $skaters );
+    $charter->replaceSkaters( $this->processFile( $request ) );
 
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter created');
   }
@@ -102,9 +100,7 @@ class ChartersController extends Controller {
 
     $charter->update( array_except( Input::all(), '_method') );
 
-    $skaters = $this->processFile( $request );
-
-    $this->replaceCharterSkaters( $charter, $skaters );
+    $charter->replaceSkaters( $this->processFile( $request ) );
 
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter updated');
   }
@@ -159,25 +155,5 @@ class ChartersController extends Controller {
       }
     }
     return $skaters;
-  }
-
-  /**
-   * Replace the related skaters in a charter with new objects from an array
-   *
-   * @param  Charter $charter
-   * @param  array $skaters
-   * @return null
-   */
-  protected function replaceCharterSkaters( Charter $charter, array $skaters )
-  {
-    foreach( $charter->skaters as $skater )
-    {
-      $skater->delete();
-    }
-
-    foreach( $skaters as $skater )
-    {
-      Skater::create( array_merge( $skater, array('charter_id' => $charter->id ) ) );
-    }
   }
 }
