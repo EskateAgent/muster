@@ -51,13 +51,13 @@ class ChartersController extends Controller {
   {
     $this->validate( $request, $this->rules );
 
-    $charter = Charter::create( Input::all() );
+    $charter = Charter::create( array_merge( Input::all(), array('league_id' => $league->id ) ) );
 
     $skaters = $this->processFile( $request );
 
-    $this->replaceCharterSkaters( $chater, $skaters );
+    $this->replaceCharterSkaters( $charter, $skaters );
 
-    return Redirect::route('leagues.show', $league->slug )->with('message', 'Charter created');
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter created');
   }
 
   /**
