@@ -3,7 +3,7 @@
 Muster is a web application for UKRDA Member Leagues and administration staff to manage the process of digitised charter submission.
 
 ## Todo
-- WFTDA-format csv upload and processing
+- <del>WFTDA-format csv upload and processing</del>
 - request approval for charter
 - review and approval/rejection of charter submissions
 - user access
