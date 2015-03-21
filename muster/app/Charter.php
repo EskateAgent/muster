@@ -13,7 +13,7 @@ class Charter extends Model {
 
   public function skaters()
   {
-    return $this->hasMany('App\Skater')->limit(20);
+    return $this->hasMany('App\Skater')->limit(20)->orderBy('number');
   }
 
   public function replaceSkaters( array $skaters )
