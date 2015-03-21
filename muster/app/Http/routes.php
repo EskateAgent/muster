@@ -15,14 +15,14 @@ Route::get('home', 'HomeController@index');
 
 Route::model('leagues', 'League');
 Route::resource('leagues', 'LeaguesController');
-Route::bind('leagues', function( $value, $route ){
-  return App\League::whereSlug( $value )->first();
+Route::bind('leagues', function( $slug ){
+  return App\League::whereSlug( $slug )->first();
 });
 
 Route::model('leagues.charters', 'Charter');
 Route::resource('leagues.charters', 'ChartersController');
-Route::bind('charters', function( $value, $route ){
-  return App\Charter::whereSlug( $value )->first();
+Route::bind('charters', function( $slug ){
+  return App\Charter::whereSlug( $slug )->first();
 });
 Route::get('leagues/{league}/charters/{charter}/request-approval', [
   'as'   => 'leagues.charters.request_approval',

@@ -69,7 +69,7 @@ class ChartersController extends Controller {
   {
     if( $charter->league != $league )
     {
-      // mismatch, what are you doing crazyperson?
+      return Redirect::route('leagues.show', $league->slug )->with('message', 'Charter not found!');
     }
     return view('charters.show', compact('league', 'charter') );
   }

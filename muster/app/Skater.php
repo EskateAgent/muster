@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Skater extends Model {
 
-  protected $fillable = array('name', 'number', 'charter_id');
+  protected $fillable = ['name', 'number', 'charter_id'];
 
   public function charter()
   {

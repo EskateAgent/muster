@@ -46,8 +46,8 @@ class LeaguesController extends Controller {
   {
     $this->validate( $request, $this->rules );
 
-    League::create( Input::all() );
-    return Redirect::route('leagues.index')->with('message', 'League created');
+    $league = League::create( Input::all() );
+    return Redirect::route('leagues.show', $league->slug )->with('message', 'League created');
   }
 
   /**
