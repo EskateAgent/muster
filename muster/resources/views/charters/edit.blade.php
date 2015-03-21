@@ -2,7 +2,7 @@
 
 @section('content')
 
-{!! Form::model( $charter, ['method' => 'PATCH', 'route' => ['leagues.charters.update', $league->slug, $charter->slug ] ] ) !!}
+{!! Form::model( $charter, ['method' => 'PATCH', 'route' => ['leagues.charters.update', $league->slug, $charter->slug ], 'files' => true ] ) !!}
   @include('charters/partials/_form')
 {!! Form::close() !!}
 
