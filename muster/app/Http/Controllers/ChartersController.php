@@ -2,6 +2,7 @@
 
 use App\League;
 use App\Charter;
+use App\Skater;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Input;
@@ -14,6 +15,7 @@ class ChartersController extends Controller {
   protected $rules = [
     'name' => ['required', 'min:3'],
     'slug' => ['required'],
+    'csv'  => ['required'],
   ];
 
   /**
@@ -34,7 +36,7 @@ class ChartersController extends Controller {
    * @param  Request $request
    * @return Response
    */
-  public function create( League $league, Request $request )
+  public function create( League $league )
   {
     return view('charters.create', compact('league') );
   }
@@ -45,11 +47,16 @@ class ChartersController extends Controller {
    * @param  League $league
    * @return Response
    */
-  public function store( League $league )
+  public function store( League $league, Request $request )
   {
     $this->validate( $request, $this->rules );
 
-    Charter::create( Input::all() );
+    $charter = Charter::create( Input::all() );
+
+    $skaters = $this->processFile( $request );
+
+    $this->replaceCharterSkaters( $chater, $skaters );
+
     return Redirect::route('leagues.show', $league->slug )->with('message', 'Charter created');
   }
 
@@ -94,6 +101,11 @@ class ChartersController extends Controller {
     $this->validate( $request, $this->rules );
 
     $charter->update( array_except( Input::all(), '_method') );
+
+    $skaters = $this->processFile( $request );
+
+    $this->replaceCharterSkaters( $charter, $skaters );
+
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter updated');
   }
 
@@ -109,4 +121,63 @@ class ChartersController extends Controller {
     //
   }
 
+  /**
+   * Process the file upload into an array of skater records to save
+   *
+   * @param  Request $request
+   * @return array
+   */
+  protected function processFile( Request $request )
+  {
+    $skaters = array();
+    if( $request->hasFile('csv') && $request->file('csv')->isValid() )
+    {
+      $file = $request->file('csv')->openFile();
+      $headers = array();
+      $name_index = $number_index = null;
+      $i = 0;
+      while( $row = $file->fgetcsv() )
+      {
+        if( $i > 30 )
+        {
+          break;
+        }
+
+        if( count( $row ) > 3 )
+        {
+          if( !$headers )
+          {
+            $headers = $row;
+            $name_index = array_search('derby_name', $headers );
+            $number_index = array_search('uniform_nbr', $headers );
+            continue;
+          }
+
+          $skaters[] = array('name' => $row[ $name_index ], 'number' => $row[ $number_index ] );
+        }
+        $i++;
+      }
+    }
+    return $skaters;
+  }
+
+  /**
+   * Replace the related skaters in a charter with new objects from an array
+   *
+   * @param  Charter $charter
+   * @param  array $skaters
+   * @return null
+   */
+  protected function replaceCharterSkaters( Charter $charter, array $skaters )
+  {
+    foreach( $charter->skaters as $skater )
+    {
+      $skater->delete();
+    }
+
+    foreach( $skaters as $skater )
+    {
+      Skater::create( array_merge( $skater, array('charter_id' => $charter->id ) ) );
+    }
+  }
 }
