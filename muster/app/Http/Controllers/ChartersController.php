@@ -106,15 +106,31 @@ class ChartersController extends Controller {
   }
 
   /**
-   * Remove the specified resource from storage.
+   * Request that the charter be approved
    *
-   * @param  League $league
-   * @param  Charter $charter
+   * @param  string $league
+   * @param  string $charter
    * @return Response
    */
-  public function destroy( League $league, Charter $charter )
+  public function requestApproval( $league, $charter )
   {
-    //
+    $league = League::whereSlug( $league )->first();
+    $charter = Charter::whereLeagueId( $league->id )->whereSlug( $charter )->first();
+
+    if( $charter->approved_at )
+    {
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has already been approved!');
+    }
+
+    if( $charter->approval_requested_at )
+    {
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'You have already requested approval for this charter!');
+    }
+
+    $charter->approval_requested_at = date('c');
+    $charter->save();
+
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been submitted for approval');
   }
 
   /**

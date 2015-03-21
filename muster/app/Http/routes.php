@@ -10,7 +10,6 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
 
@@ -25,6 +24,11 @@ Route::resource('leagues.charters', 'ChartersController');
 Route::bind('charters', function( $value, $route ){
   return App\Charter::whereSlug( $value )->first();
 });
+Route::get('leagues/{league}/charters/{charter}/request-approval', [
+  'as'   => 'leagues.charters.request_approval',
+  'uses' => 'ChartersController@requestApproval',
+]);
+
 
 Route::controllers([
   'auth'     => 'Auth\AuthController',

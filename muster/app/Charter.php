@@ -4,7 +4,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Charter extends Model {
 
-  protected $guarded = [];
+  protected $guarded = ['id'];
 
   public function league()
   {
