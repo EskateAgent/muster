@@ -66,6 +66,7 @@ class LeaguesTableSeeder extends Seeder {
       ['id' => 54, 'name' => 'Wirral Whipiteres',              'slug' => 'wirral-whipieters',              'created_at' => new DateTime, 'updated_at' => new DateTime],
       ['id' => 55, 'name' => 'Wolverhampton Honour Rollers',   'slug' => 'wolverhamption-honour-rollers',  'created_at' => new DateTime, 'updated_at' => new DateTime],
       ['id' => 56, 'name' => 'Wrexham Rejects',                'slug' => 'wrexham-rejects',                'created_at' => new DateTime, 'updated_at' => new DateTime],
+      ['id' => 57, 'name' => 'Nottingham Roller Derby',        'slug' => 'nottingham-roller-derby',        'created_at' => new DateTime, 'updated_at' => new DateTime],
     );
 
     // Uncomment the below to run the seeder
