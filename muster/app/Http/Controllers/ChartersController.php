@@ -134,6 +134,64 @@ class ChartersController extends Controller {
   }
 
   /**
+   * Approve the charter
+   *
+   * @param  string $league
+   * @param  string $charter
+   * @return Response
+   */
+  public function approve( $league, $charter )
+  {
+    $league = League::whereSlug( $league )->first();
+    $charter = Charter::whereLeagueId( $league->id )->whereSlug( $charter )->first();
+
+    if( $charter->approved_at )
+    {
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has already been approved!');
+    }
+
+    if( !$charter->approval_requested_at )
+    {
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has not been submitted for approval!');
+    }
+
+    $charter->update( array_except( Input::all(), '_method') );
+    $charter->approved_at = date('c');
+    $charter->save();
+
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been approved');
+  }
+
+  /**
+   * Reject the charter
+   *
+   * @param  string $league
+   * @param  string $charter
+   * @return Response
+   */
+  public function reject( $league, $charter )
+  {
+    $league = League::whereSlug( $league )->first();
+    $charter = Charter::whereLeagueId( $league->id )->whereSlug( $charter )->first();
+
+    if( $charter->approved_at )
+    {
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has already been approved!');
+    }
+
+    if( !$charter->approval_requested_at )
+    {
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has not been submitted for approval!');
+    }
+
+    $charter->update( array_except( Input::all(), '_method') );
+    $charter->approval_requested_at = null;
+    $charter->save();
+
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been rejected!');
+  }
+
+  /**
    * Process the file upload into an array of skater records to save
    *
    * @param  Request $request

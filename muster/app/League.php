@@ -13,22 +13,32 @@ class League extends Model {
 
   public function approvedCharters()
   {
-    return $this->charters()->whereNotNull('approved_at')->orderBy('approved_at', 'desc');
+    return $this->charters()->whereNotNull('active_from')->orderBy('active_from', 'desc');
   }
 
   public function currentCharter()
   {
-    return $this->approvedCharters()->first();
+    return $this->approvedCharters()->where('active_from', '<=', date('c') )->first();
   }
 
   public function draftCharter()
   {
-    return $this->charters()->whereNull('approved_at')->first();
+    return $this->charters()->whereNull('active_from')->whereNull('approval_requested_at')->first();
   }
 
   public function historicalCharters()
   {
-    return $this->approvedCharters()->take(10)->skip(1)->get();
+    return $this->approvedCharters()->where('active_from', '<=', date('c') )->take(10)->skip(1)->get();
+  }
+
+  public function pendingCharter()
+  {
+    return $this->charters()->whereNull('active_from')->whereNotNull('approval_requested_at')->first();
+  }
+
+  public function upcomingCharter()
+  {
+    return $this->approvedCharters()->where('active_from', '>', date('c') )->first();
   }
 
 }

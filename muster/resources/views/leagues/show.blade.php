@@ -11,11 +11,19 @@
     @if( $draft = $league->draftCharter() )
       <h4>Draft</h4>
       <p><a href="{{ route('leagues.charters.show', [ $league->slug, $draft->slug ] ) }}">{{ $draft->name }}</a></p>
+    @elseif( $pending = $league->pendingCharter() )
+      <h4>Pending</h4>
+      <p><a href="{{ route('leagues.charters.show', [ $league->slug, $pending->slug ] ) }}">{{ $pending->name }}</a></p>
     @endif
 
     @if( $current = $league->currentCharter() )
       <h4>Current</h4>
       <p><a href="{{ route('leagues.charters.show', [ $league->slug, $current->slug ] ) }}">{{ $current->name }}</a></p>
+    @endif
+
+    @if( $upcoming = $league->upcomingCharter() )
+      <h4>Upcoming</h4>
+      <p><a href="{{ route('leagues.charters.show', [ $league->slug, $upcoming->slug ] ) }}">{{ $upcoming->name }}</a> (becomes active {{ $upcoming->active_from }})</p>
     @endif
 
     @if( ( $league->historicalCharters()->count() ) )

@@ -28,6 +28,14 @@ Route::get('leagues/{league}/charters/{charter}/request-approval', [
   'as'   => 'leagues.charters.request_approval',
   'uses' => 'ChartersController@requestApproval',
 ]);
+Route::patch('leagues/{league}/charters/{charter}/approve', [
+  'as'   => 'leagues.charters.approve',
+  'uses' => 'ChartersController@approve',
+]);
+Route::patch('leagues/{league}/charters/{charter}/reject', [
+  'as'   => 'leagues.charters.reject',
+  'uses' => 'ChartersController@reject',
+]);
 
 
 Route::controllers([
