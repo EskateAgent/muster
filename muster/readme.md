@@ -8,7 +8,7 @@ Muster is a web application for UKRDA Member Leagues and administration staff to
 - <del>review and approval/rejection of charter submissions</del>
 - user access
  - role-based permissions
- - league logins
+ - create league and staff logins
 - audit log
 - email notifications
 - auto-slugging
