@@ -47,7 +47,7 @@ class LeaguesController extends Controller {
     $this->validate( $request, $this->rules );
 
     $league = League::create( Input::all() );
-    return Redirect::route('leagues.show', $league->slug )->with('message', 'League created');
+    return Redirect::route('leagues.show', $league->slug )->with('message', 'League has been created');
   }
 
   /**
@@ -84,18 +84,7 @@ class LeaguesController extends Controller {
     $this->validate( $request, $this->rules );
 
     $league->update( array_except( Input::all(), '_method') );
-    return Redirect::route('leagues.show', $league->slug )->with('message', 'League updated');
-  }
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  League $league
-   * @return Response
-   */
-  public function destroy( League $league )
-  {
-    //
+    return Redirect::route('leagues.show', $league->slug )->with('message', 'League has been updated');
   }
 
 }

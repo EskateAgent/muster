@@ -55,7 +55,7 @@ class ChartersController extends Controller {
 
     $charter->replaceSkaters( $this->processFile( $request ) );
 
-    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter created');
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been created');
   }
 
   /**
@@ -102,7 +102,7 @@ class ChartersController extends Controller {
 
     $charter->replaceSkaters( $this->processFile( $request ) );
 
-    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter updated');
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been updated');
   }
 
   /**
