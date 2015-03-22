@@ -146,6 +146,7 @@ return [
     'App\Providers\RouteServiceProvider',
 
     'Collective\Html\HtmlServiceProvider',
+    'Zizaco\Entrust\EntrustServiceProvider',
 
   ],
 
@@ -195,8 +196,9 @@ return [
     'Validator' => 'Illuminate\Support\Facades\Validator',
     'View'      => 'Illuminate\Support\Facades\View',
 
-    'Form' => 'Collective\Html\FormFacade',
-    'Html' => 'Collective\Html\HtmlFacade',
+    'Form'      => 'Collective\Html\FormFacade',
+    'Html'      => 'Collective\Html\HtmlFacade',
+    'Entrust'   => 'Zizaco\Entrust\EntrustFacade',
 
   ],
 
