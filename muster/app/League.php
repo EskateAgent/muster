@@ -6,6 +6,11 @@ class League extends Model {
 
   protected $guarded = ['id'];
 
+  public function user()
+  {
+    return $this->belongsTo('App\User');
+  }
+
   public function charters()
   {
     return $this->hasMany('App\Charter')->limit(20);
