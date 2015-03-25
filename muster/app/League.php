@@ -1,6 +1,7 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class League extends Model {
 
@@ -46,4 +47,21 @@ class League extends Model {
     return $this->approvedCharters()->where('active_from', '>', date('c') )->first();
   }
 
+  public function usersUpForGrabs()
+  {
+    $leagues = DB::table('leagues')->whereNotNull('user_id')->select('user_id')->get();
+    $user_ids = array();
+    foreach( $leagues as $league )
+    {
+      $user_ids[] = $league->user_id;
+    }
+
+    $users = array( 0 => '- none -');
+    $records = DB::table('users')->whereNotIn('id', $user_ids )->orderBy('name', 'asc')->get();
+    foreach( $records as $user )
+    {
+      $users[ $user->id ] = $user->name;
+    }
+    return $users;
+  }
 }

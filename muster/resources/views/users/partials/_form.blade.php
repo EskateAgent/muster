@@ -10,7 +10,7 @@
 
 <div class="form-group">
   {!! Form::label('league_id', 'League:') !!}
-  {!! Form::number('league_id') !!}
+  {!! Form::select('league_id', $user->leaguesUpForGrabs() ) !!}
 </div>
 
 <div class="form-group">

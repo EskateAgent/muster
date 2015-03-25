@@ -9,5 +9,11 @@
 </div>
 
 <div class="form-group">
+  {!! Form::label('user_id', 'User:') !!}
+  {!! Form::select('user_id', $league->usersUpForGrabs() ) !!}
+</div>
+
+
+<div class="form-group">
   {!! Form::submit('Save', ['class' => 'btn primary'] ) !!}
 </div>

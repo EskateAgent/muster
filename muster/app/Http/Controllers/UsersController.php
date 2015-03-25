@@ -115,5 +115,4 @@ class UsersController extends Controller {
 
     return Redirect::route('users.show', $user->id )->with('message', 'User has been updated');
   }
-
 }
