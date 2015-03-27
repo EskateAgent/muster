@@ -1,7 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use App\League;
-
 class HomeController extends Controller {
 
   /*
@@ -32,7 +30,7 @@ class HomeController extends Controller {
    */
   public function index()
   {
-    $leagues = League::all();
+    $leagues = \App\League::all();
     return view('home', compact('leagues') );
   }
 

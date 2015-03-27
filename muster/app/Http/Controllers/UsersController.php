@@ -32,7 +32,8 @@ class UsersController extends Controller {
    */
   public function create()
   {
-    return view('users.create');
+    $user = new User;
+    return view('users.create', compact('user') );
   }
 
   /**
@@ -55,12 +56,18 @@ class UsersController extends Controller {
     $this->validate( $request, $this->rules );
     $user = User::create( Input::all() );
 
-    if( $league && !$league->user )
+    $password = $this->generateTemporaryPassword();
+
+    $user->password = \Hash::make( $password );
+    $user->save();
+
+    if( isset( $league ) && !$league->user )
     {
       $league->user_id = $user->id;
       $league->save();
     }
 
+    // at this point, send an email with the new temporary password to the user
     return Redirect::route('users.show', $user->id )->with('message', 'User has been created');
   }
 
@@ -114,5 +121,10 @@ class UsersController extends Controller {
     }
 
     return Redirect::route('users.show', $user->id )->with('message', 'User has been updated');
+  }
+
+  protected function generateTemporaryPassword()
+  {
+    return substr( str_shuffle( md5( microtime() ) ), 0, 8 );
   }
 }

@@ -2,8 +2,8 @@
 
 @section('content')
 
-{!! Form::model( new App\User, ['route' => ['users.store'] ] ) !!}
-  @include('users/partials/_form')
+{!! Form::model( $user, ['route' => ['users.store'] ] ) !!}
+  @include('users/partials/_form', ['user' => $user ] )
 {!! Form::close() !!}
 
 @endsection
