@@ -1,17 +1,31 @@
 @extends('app')
 
 @section('content')
-<div class="container">
-	<div class="row">
-		<div class="col-md-10 col-md-offset-1">
-			<div class="panel panel-default">
-				<div class="panel-heading">Home</div>
+  <h2>All Leagues</h2>
 
-				<div class="panel-body">
-					You are logged in!
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+  @if( !$leagues->count() )
+    No leagues
+  @else
+    <table>
+      <thead>
+        <tr>
+          <th>League</th>
+          <th>Charter</th>
+        </tr>
+      </thead>
+      <tbody>
+      @foreach( $leagues as $league )
+        <tr>
+          <td><a href="{{ route('leagues.show', [ $league->slug ] ) }}">{{ $league->name }}</a></td>
+          <td>
+            @if( $charter = $league->currentCharter() )
+              <a href="{{ route('leagues.charters.show', [ $league->slug, $charter->slug ] ) }}">{{ $charter->name }}</a>
+            @else
+              -
+            @endif
+          </td>
+        </tr>
+      @endforeach
+    </table>
+  @endif
 @endsection

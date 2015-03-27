@@ -1,7 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use App\League;
-
 class WelcomeController extends Controller {
 
   /*
@@ -32,8 +30,7 @@ class WelcomeController extends Controller {
    */
   public function index()
   {
-    $leagues = League::all();
-    return view('welcome', compact('leagues') );
+    return view('welcome');
   }
 
 }
