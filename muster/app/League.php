@@ -57,11 +57,20 @@ class League extends Model {
     }
 
     $users = array( 0 => '- none -');
-    $records = DB::table('users')->whereNotIn('id', $user_ids )->orderBy('name', 'asc')->get();
+
+    $query = DB::table('users')->whereNotIn('id', $user_ids );
+    if( !is_null( $this->user_id ) )
+    {
+      $query->orWhere('id', '=', $this->user_id );
+    }
+
+    $records = $query->orderBy('name', 'asc')->get();
+
     foreach( $records as $user )
     {
       $users[ $user->id ] = $user->name;
     }
+    ksort( $users );
     return $users;
   }
 }
