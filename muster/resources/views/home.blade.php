@@ -11,6 +11,7 @@
         <tr>
           <th>League</th>
           <th>Charter</th>
+          <th>User</th>
         </tr>
       </thead>
       <tbody>
@@ -20,6 +21,13 @@
           <td>
             @if( $charter = $league->currentCharter() )
               <a href="{{ route('leagues.charters.show', [ $league->slug, $charter->slug ] ) }}">{{ $charter->name }}</a>
+            @else
+              -
+            @endif
+          </td>
+          <td>
+            @if( $user = $league->user )
+              <a href="{{ route('users.show', [ $league->user->id ] ) }}">{{ $user->name }}</a>
             @else
               -
             @endif
