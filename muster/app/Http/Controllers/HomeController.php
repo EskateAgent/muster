@@ -30,7 +30,8 @@ class HomeController extends Controller {
    */
   public function index()
   {
-    return view('home');
+    $leagues = \App\League::all();
+    return view('home', compact('leagues') );
   }
 
 }

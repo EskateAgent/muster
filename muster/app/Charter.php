@@ -6,6 +6,8 @@ class Charter extends Model {
 
   protected $guarded = ['id'];
 
+  protected $dates = ['approved_at', 'approval_requested_at', 'active_from'];
+
   public function league()
   {
     return $this->belongsTo('App\League');

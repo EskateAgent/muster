@@ -21,7 +21,7 @@ class UsersController extends Controller {
    */
   public function index()
   {
-    $users = League::all();
+    $users = User::all();
     return view('users.index', compact('users') );
   }
 
@@ -32,7 +32,8 @@ class UsersController extends Controller {
    */
   public function create()
   {
-    return view('users.create');
+    $user = new User;
+    return view('users.create', compact('user') );
   }
 
   /**
@@ -43,9 +44,30 @@ class UsersController extends Controller {
    */
   public function store( Request $request )
   {
-    $this->validate( $request, $this->rules );
+    if( $league_id = $request->input('league_id') )
+    {
+      $league = \App\League::find( $league_id );
+      if( $league->user && ( $league->user_id != $user->id ) )
+      {
+        Redirect::route('users.index')->with('message', $league->name . ' already has a user!');
+      }
+    }
 
+    $this->validate( $request, $this->rules );
     $user = User::create( Input::all() );
+
+    $password = $this->generateTemporaryPassword();
+
+    $user->password = \Hash::make( $password );
+    $user->save();
+
+    if( isset( $league ) && !$league->user )
+    {
+      $league->user_id = $user->id;
+      $league->save();
+    }
+
+    // at this point, send an email with the new temporary password to the user
     return Redirect::route('users.show', $user->id )->with('message', 'User has been created');
   }
 
@@ -68,7 +90,8 @@ class UsersController extends Controller {
    */
   public function edit( User $user )
   {
-    return view('users.edit', compact('user') );
+    $league_id = !is_null( $user->league ) ? $user->league->id : 0;
+    return view('users.edit', compact('user', 'league_id') );
   }
 
   /**
@@ -80,10 +103,29 @@ class UsersController extends Controller {
    */
   public function update( User $user, Request $request )
   {
-    $this->validate( $request, $this->rules );
+    if( $league_id = $request->input('league_id') )
+    {
+      $league = \App\League::find( $league_id );
+      if( $league->user && ( $league->user_id != $user->id ) )
+      {
+        Redirect::route('users.index')->with('message', $league->name . ' already has a user!');
+      }
+    }
 
-    $league->update( array_except( Input::all(), '_method') );
+    $this->validate( $request, $this->rules );
+    $user->update( array_except( Input::all(), array('_method', 'league_id') ) );
+
+    if( $league && !$league->user )
+    {
+      $league->user_id = $user->id;
+      $league->save();
+    }
+
     return Redirect::route('users.show', $user->id )->with('message', 'User has been updated');
   }
 
+  protected function generateTemporaryPassword()
+  {
+    return substr( str_shuffle( md5( microtime() ) ), 0, 8 );
+  }
 }

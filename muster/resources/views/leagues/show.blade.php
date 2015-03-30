@@ -2,6 +2,9 @@
 
 @section('content')
   <h2>{{ $league->name }} <a href="{{ route('leagues.edit', [ $league->slug ] ) }}">edit</a></h2>
+  @if( $league->user )
+  <p>User: <a href="{{ route('users.show', $league->user_id ) }}">{{ $league->user->name }}</a>
+  @endif
 
   <h3>Charters</h3>
   @if( !$league->charters->count() )

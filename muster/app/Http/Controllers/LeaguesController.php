@@ -69,7 +69,8 @@ class LeaguesController extends Controller {
    */
   public function edit( League $league )
   {
-    return view('leagues.edit', compact('league') );
+    $user_id = !is_null( $league->user_id ) ? $league->user_id : 0;
+    return view('leagues.edit', compact('league', 'user_id') );
   }
 
   /**

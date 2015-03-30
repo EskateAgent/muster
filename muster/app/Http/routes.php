@@ -13,6 +13,12 @@
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
 
+Route::model('users', 'User');
+Route::resource('users', 'UsersController');
+Route::bind('users', function( $id ){
+  return App\User::whereId( $id )->first();
+});
+
 Route::model('leagues', 'League');
 Route::resource('leagues', 'LeaguesController');
 Route::bind('leagues', function( $slug ){
@@ -36,7 +42,6 @@ Route::patch('leagues/{league}/charters/{charter}/reject', [
   'as'   => 'leagues.charters.reject',
   'uses' => 'ChartersController@reject',
 ]);
-
 
 Route::controllers([
   'auth'     => 'Auth\AuthController',
