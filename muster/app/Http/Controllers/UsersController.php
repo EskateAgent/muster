@@ -90,7 +90,8 @@ class UsersController extends Controller {
    */
   public function edit( User $user )
   {
-    return view('users.edit', compact('user') );
+    $league_id = !is_null( $user->league ) ? $user->league->id : 0;
+    return view('users.edit', compact('user', 'league_id') );
   }
 
   /**
