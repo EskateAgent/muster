@@ -126,7 +126,7 @@ class ChartersController extends Controller {
       return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'You have already requested approval for this charter!');
     }
 
-    $charter->approval_requested_at = date('c');
+    $charter->approval_requested_at = \Carbon\Carbon::now();
     $charter->save();
 
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been submitted for approval');
@@ -155,7 +155,7 @@ class ChartersController extends Controller {
     }
 
     $charter->update( array_except( Input::all(), '_method') );
-    $charter->approved_at = date('c');
+    $charter->approved_at = \Carbon\Carbon::now();
     $charter->save();
 
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been approved');
