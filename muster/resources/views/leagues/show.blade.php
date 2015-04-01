@@ -1,7 +1,12 @@
 @extends('app')
 
 @section('content')
-  <h2>{{ $league->name }} <a href="{{ route('leagues.edit', [ $league->slug ] ) }}">edit</a></h2>
+  <h2>
+    {{ $league->name }}
+    @if( $user->can('league-edit') )
+      <a href="{{ route('leagues.edit', [ $league->slug ] ) }}">edit</a>
+    @endif
+  </h2>
   @if( $league->user )
   <p>User: <a href="{{ route('users.show', $league->user_id ) }}">{{ $league->user->name }}</a>
   @endif
@@ -9,7 +14,10 @@
   <h3>Charters</h3>
   @if( !$league->charters->count() )
     <p>{{ $league->name }} has not submitted any charters.</p>
-    <p><a href="{{ route('leagues.charters.create', [ $league->slug ] ) }}">create new charter</a>
+
+    @if( $user->can('charter-create') )
+      <p><a href="{{ route('leagues.charters.create', [ $league->slug ] ) }}">create new charter</a>
+    @endif
   @else
     @if( $draft = $league->draftCharter() )
       <h4>Draft</h4>

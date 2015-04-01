@@ -87,5 +87,4 @@ class LeaguesController extends Controller {
     $league->update( array_except( Input::all(), '_method') );
     return Redirect::route('leagues.show', $league->slug )->with('message', 'League has been updated');
   }
-
 }
