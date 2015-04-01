@@ -3,6 +3,7 @@
 use App\League;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Auth;
 use Input;
 use Redirect;
 
@@ -70,6 +71,12 @@ class LeaguesController extends Controller {
   public function edit( League $league )
   {
     $user_id = !is_null( $league->user_id ) ? $league->user_id : 0;
+
+    if( !( ( Auth::user()->id == $user_id ) || Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
+    {
+      \App::abort(403);
+    }
+
     return view('leagues.edit', compact('league', 'user_id') );
   }
 
@@ -82,6 +89,13 @@ class LeaguesController extends Controller {
    */
   public function update( League $league, Request $request )
   {
+    $user_id = !is_null( $league->user_id ) ? $league->user_id : 0;
+
+    if( !( ( Auth::user()->id == $user_id ) || Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
+    {
+      \App::abort(403);
+    }
+
     $this->validate( $request, $this->rules );
 
     $league->update( array_except( Input::all(), '_method') );

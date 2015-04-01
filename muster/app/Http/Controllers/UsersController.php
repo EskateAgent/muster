@@ -3,6 +3,7 @@
 use App\User;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Auth;
 use Input;
 use Redirect;
 
@@ -90,6 +91,11 @@ class UsersController extends Controller {
    */
   public function edit( User $user )
   {
+    if( !( ( Auth::user()->id == $user->id ) || Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
+    {
+      \App::abort(403);
+    }
+
     $league_id = !is_null( $user->league ) ? $user->league->id : 0;
     return view('users.edit', compact('user', 'league_id') );
   }
@@ -103,6 +109,11 @@ class UsersController extends Controller {
    */
   public function update( User $user, Request $request )
   {
+    if( !( ( Auth::user()->id == $user->id ) || Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
+    {
+      \App::abort(403);
+    }
+
     if( $league_id = $request->input('league_id') )
     {
       $league = \App\League::find( $league_id );
