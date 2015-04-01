@@ -8,15 +8,4 @@ abstract class Controller extends BaseController {
 
   use DispatchesCommands, ValidatesRequests;
 
-  /**
-   * Construct a new Controller object
-   *
-   * @return null
-   */
-  public function __construct()
-  {
-    $this->beforeFilter( function(){
-      \View::share('user', \Auth::user() );
-    });
-  }
 }

@@ -2,7 +2,7 @@
 
 @section('content')
   <h2>Leagues</h2>
-  @if( $user->can('league-create') )
+  @if( Auth::user()->can('league-create') )
     <a href="{{ route('leagues.create') }}">create new</a>
   @endif
 

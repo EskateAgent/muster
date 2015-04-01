@@ -3,7 +3,7 @@
 @section('content')
   <h2>
     {{ $league->name }}
-    @if( $user->can('league-edit') )
+    @if( Auth::user()->can('league-edit') )
       <a href="{{ route('leagues.edit', [ $league->slug ] ) }}">edit</a>
     @endif
   </h2>
@@ -15,7 +15,7 @@
   @if( !$league->charters->count() )
     <p>{{ $league->name }} has not submitted any charters.</p>
 
-    @if( $user->can('charter-create') )
+    @if( Auth::user()->can('charter-create') )
       <p><a href="{{ route('leagues.charters.create', [ $league->slug ] ) }}">create new charter</a>
     @endif
   @else

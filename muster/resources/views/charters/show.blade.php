@@ -8,10 +8,10 @@
   @endif
 
   @if( !$charter->active_from && !$charter->approval_requested_at )
-    @if( $user->can('charter-edit') )
+    @if( Auth::user()->can('charter-edit') )
       <p><a href="{{ route('leagues.charters.edit', [ $league->slug, $charter->slug ] ) }}">upload a new revision</a></p>
     @endif
-    @if( $user->can('charter-request_approval') )
+    @if( Auth::user()->can('charter-request_approval') )
       <p><a href="{{ route('leagues.charters.request_approval', [ $league->slug, $charter->slug ]) }}">submit this revision for approval</a></p>
     @endif
   @endif
@@ -19,7 +19,7 @@
   @if( $charter->approval_requested_at && !$charter->active_from )
     <p>Charter has been submitted for approval</p>
 
-    @if( $user->can('charter-approve') )
+    @if( Auth::user()->can('charter-approve') )
       <p>Approve this charter:</p>
       {!! Form::model( $charter, ['method' => 'PATCH', 'route' => ['leagues.charters.approve', $league->slug, $charter->slug ] ] ) !!}
         <div class="form-group">
@@ -32,7 +32,7 @@
       {!! Form::close() !!}
     @endif
 
-    @if( $user->can('charter-reject') )
+    @if( Auth::user()->can('charter-reject') )
       <p>Reject this charter:</p>
       {!! Form::model( $charter, ['method' => 'PATCH', 'route' => ['leagues.charters.reject', $league->slug, $charter->slug ] ] ) !!}
         @if( $charter->rejection_reason )

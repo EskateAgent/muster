@@ -2,7 +2,9 @@
 
 @section('content')
   <h2>Users</h2>
-  <a href="{{ route('users.create') }}">create new</a>
+  @if( Auth::user()->can('user-create') )
+    <a href="{{ route('users.create') }}">create new</a>
+  @endif
 
   @if( !$users->count() )
     None
