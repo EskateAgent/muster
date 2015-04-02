@@ -3,7 +3,7 @@
 @section('content')
   <h2>
     {{ $user->name }}
-    @if( Auth::user()->can('user-edit') )
+    @if( Auth::user()->can('user-edit') && ( ( Auth::user()->id == $user->id ) || Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
       <a href="{{ route('users.edit', [ $user->id ] ) }}">edit</a>
     @endif
   </h2>

@@ -8,10 +8,10 @@
   @endif
 
   @if( !$charter->active_from && !$charter->approval_requested_at )
-    @if( Auth::user()->can('charter-edit') )
+    @if( Auth::user()->can('charter-edit') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
       <p><a href="{{ route('leagues.charters.edit', [ $league->slug, $charter->slug ] ) }}">upload a new revision</a></p>
     @endif
-    @if( Auth::user()->can('charter-request_approval') )
+    @if( Auth::user()->can('charter-request_approval') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
       <p><a href="{{ route('leagues.charters.request_approval', [ $league->slug, $charter->slug ]) }}">submit this revision for approval</a></p>
     @endif
   @endif
