@@ -38,6 +38,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     return $this->hasOne('App\League');
   }
 
+  public function events()
+  {
+    return $this->hasMany('App\Event');
+  }
+
   public function leaguesUpForGrabs() // naming things is hard
   {
     $records = \App\League::whereNull('user_id')->orWhere('user_id', '=', $this->id )->orderBy('name', 'asc')->get();

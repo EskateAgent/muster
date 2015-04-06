@@ -8,6 +8,7 @@ use Input;
 use Redirect;
 
 use Illuminate\Http\Request;
+use App\Commands\LogEventCommand;
 
 class UsersController extends Controller {
 
@@ -67,6 +68,8 @@ class UsersController extends Controller {
       $league->user_id = $user->id;
       $league->save();
     }
+
+    $this->dispatch( new LogEventCommand( Auth::user(), 'stored', $user ) );
 
     // at this point, send an email with the new temporary password to the user
     return Redirect::route('users.show', $user->id )->with('message', 'User has been created');
@@ -131,6 +134,8 @@ class UsersController extends Controller {
       $league->user_id = $user->id;
       $league->save();
     }
+
+    $this->dispatch( new LogEventCommand( Auth::user(), 'updated', $user ) );
 
     return Redirect::route('users.show', $user->id )->with('message', 'User has been updated');
   }

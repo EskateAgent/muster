@@ -8,6 +8,7 @@ use Input;
 use Redirect;
 
 use Illuminate\Http\Request;
+use App\Commands\LogEventCommand;
 
 class LeaguesController extends Controller {
 
@@ -47,7 +48,16 @@ class LeaguesController extends Controller {
   {
     $this->validate( $request, $this->rules );
 
-    $league = League::create( Input::all() );
+    $input = Input::all();
+    if( isset( $input['user_id'] ) && !$input['user_id'] )
+    {
+      unset( $input['user_id'] );
+    }
+
+    $league = League::create( $input );
+
+    $this->dispatch( new LogEventCommand( Auth::user(), 'stored', $league ) );
+
     return Redirect::route('leagues.show', $league->slug )->with('message', 'League has been created');
   }
 
@@ -98,7 +108,16 @@ class LeaguesController extends Controller {
 
     $this->validate( $request, $this->rules );
 
-    $league->update( array_except( Input::all(), '_method') );
+    $input = Input::all();
+    if( isset( $input['user_id'] ) && !$input['user_id'] )
+    {
+      unset( $input['user_id'] );
+    }
+
+    $league->update( array_except( $input, '_method') );
+
+    $this->dispatch( new LogEventCommand( Auth::user(), 'updated', $league ) );
+
     return Redirect::route('leagues.show', $league->slug )->with('message', 'League has been updated');
   }
 }

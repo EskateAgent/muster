@@ -9,6 +9,7 @@ use Input;
 use Redirect;
 
 use Illuminate\Http\Request;
+use App\Commands\LogEventCommand;
 
 class ChartersController extends Controller {
 
@@ -64,6 +65,8 @@ class ChartersController extends Controller {
     $charter = Charter::create( array_merge( Input::all(), array('league_id' => $league->id ) ) );
 
     $charter->replaceSkaters( $this->processFile( $request ) );
+
+    $this->dispatch( new LogEventCommand( Auth::user(), 'stored', $charter ) );
 
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been created');
   }
@@ -128,6 +131,8 @@ class ChartersController extends Controller {
 
     $charter->replaceSkaters( $this->processFile( $request ) );
 
+    $this->dispatch( new LogEventCommand( Auth::user(), 'updated', $charter ) );
+
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been updated');
   }
 
@@ -161,6 +166,8 @@ class ChartersController extends Controller {
     $charter->approval_requested_at = \Carbon\Carbon::now();
     $charter->save();
 
+    $this->dispatch( new LogEventCommand( Auth::user(), 'requested-approval', $charter ) );
+
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been submitted for approval');
   }
 
@@ -190,6 +197,8 @@ class ChartersController extends Controller {
     $charter->approved_at = \Carbon\Carbon::now();
     $charter->save();
 
+    $this->dispatch( new LogEventCommand( Auth::user(), 'approved', $charter ) );
+
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been approved');
   }
 
@@ -218,6 +227,8 @@ class ChartersController extends Controller {
     $charter->update( array_except( Input::all(), '_method') );
     $charter->approval_requested_at = null;
     $charter->save();
+
+    $this->dispatch( new LogEventCommand( Auth::user(), 'rejected', $charter ) );
 
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been rejected!');
   }
