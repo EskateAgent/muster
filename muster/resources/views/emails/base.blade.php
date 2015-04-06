@@ -1,0 +1,3 @@
+Hi {{ $name }},
+
+@yield('content')

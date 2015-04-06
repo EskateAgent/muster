@@ -56,11 +56,15 @@ class UsersController extends Controller {
     }
 
     $this->validate( $request, $this->rules );
+
     $user = User::create( Input::all() );
 
     $password = $this->generateTemporaryPassword();
-
     $user->password = \Hash::make( $password );
+
+    $role_id = isset( $league ) ? 3 : 2;
+    $user->roles()->sync([ $role_id ]);
+
     $user->save();
 
     if( isset( $league ) && !$league->user )
@@ -71,7 +75,10 @@ class UsersController extends Controller {
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'stored', $user ) );
 
-    // at this point, send an email with the new temporary password to the user
+    \Mail::send('emails.welcome', ['name' => $user->name, 'password' => $password ], function( $message )use( $user ){
+      $message->to( $user->email, $user->name )->subject('Welcome!');
+    });
+
     return Redirect::route('users.show', $user->id )->with('message', 'User has been created');
   }
 
