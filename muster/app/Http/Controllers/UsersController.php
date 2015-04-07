@@ -35,7 +35,8 @@ class UsersController extends Controller {
   public function create()
   {
     $user = new User;
-    return view('users.create', compact('user') );
+    $role_id = null;
+    return view('users.create', compact('user', 'role_id') );
   }
 
   /**
@@ -62,10 +63,12 @@ class UsersController extends Controller {
     $password = $this->generateTemporaryPassword();
     $user->password = \Hash::make( $password );
 
-    $role_id = isset( $league ) ? 3 : 2;
-    $user->roles()->sync([ $role_id ]);
-
     $user->save();
+
+    if( $role = $request->input('role') )
+    {
+      $user->roles()->sync([ $role ]);
+    }
 
     if( isset( $league ) && !$league->user )
     {
@@ -107,7 +110,8 @@ class UsersController extends Controller {
     }
 
     $league_id = !is_null( $user->league ) ? $user->league->id : 0;
-    return view('users.edit', compact('user', 'league_id') );
+    $role_id = $user->roles()->first()->id;
+    return view('users.edit', compact('user', 'league_id', 'role_id') );
   }
 
   /**
@@ -136,7 +140,12 @@ class UsersController extends Controller {
     $this->validate( $request, $this->rules );
     $user->update( array_except( Input::all(), array('_method', 'league_id') ) );
 
-    if( $league && !$league->user )
+    if( $role = $request->input('role') )
+    {
+      $user->roles()->sync([ $role ]);
+    }
+
+    if( isset( $league ) && !$league->user )
     {
       $league->user_id = $user->id;
       $league->save();

@@ -9,6 +9,11 @@
 </div>
 
 <div class="form-group">
+  {!! Form::label('role', 'Role:') !!}
+  {!! Form::select('role', \App\Role::lists('name', 'id'), $role_id ) !!}
+</div>
+
+<div class="form-group">
   {!! Form::label('league_id', 'League:') !!}
   {!! Form::select('league_id', $user->leaguesUpForGrabs(), $league_id ) !!}
 </div>
