@@ -43,6 +43,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     return $this->hasMany('App\Event');
   }
 
+  public function role()
+  {
+    return $this->roles()->first();
+  }
+
   public function leaguesUpForGrabs() // naming things is hard
   {
     $records = \App\League::whereNull('user_id')->orWhere('user_id', '=', $this->id )->orderBy('name', 'asc')->get();
@@ -52,5 +57,16 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
       $leagues[ $league->id ] = $league->name;
     }
     return $leagues;
+  }
+
+  public function rolesUpForGrabs()
+  {
+    $records = \App\Role::where('id','>=', \Auth::user()->role()->id )->orderBy('display_name', 'asc')->get();
+    $roles = array();
+    foreach( $records as $role )
+    {
+      $roles[ $role->id ] = $role->display_name;
+    }
+    return $roles;
   }
 }

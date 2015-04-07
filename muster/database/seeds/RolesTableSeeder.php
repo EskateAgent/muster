@@ -12,7 +12,7 @@ class RolesTableSeeder extends Seeder {
     $roles = array(
       ['id' => 1, 'name' => 'root',   'display_name' => 'Root',        'Description' => 'Developers',           'created_at' => new DateTime, 'updated_at' => new DateTime],
       ['id' => 2, 'name' => 'staff',  'display_name' => 'UKRDA Staff', 'Description' => 'Organisational staff', 'created_at' => new DateTime, 'updated_at' => new DateTime],
-      ['id' => 3, 'name' => 'league', 'display_name' => 'Leagues',     'Description' => 'Member leagues',       'created_at' => new DateTime, 'updated_at' => new DateTime],
+      ['id' => 3, 'name' => 'league', 'display_name' => 'League',      'Description' => 'Member leagues',       'created_at' => new DateTime, 'updated_at' => new DateTime],
     );
 
     // Uncomment the below to run the seeder

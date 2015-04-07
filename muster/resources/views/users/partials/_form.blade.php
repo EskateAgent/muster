@@ -10,7 +10,7 @@
 
 <div class="form-group">
   {!! Form::label('role', 'Role:') !!}
-  {!! Form::select('role', \App\Role::lists('name', 'id'), $role_id ) !!}
+  {!! Form::select('role', $user->rolesUpForGrabs(), $role_id ) !!}
 </div>
 
 <div class="form-group">

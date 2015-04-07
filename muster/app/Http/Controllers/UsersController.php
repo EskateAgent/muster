@@ -67,6 +67,10 @@ class UsersController extends Controller {
 
     if( $role = $request->input('role') )
     {
+      if( $role > Auth::user()->role()->id )
+      {
+        \App::abort(403);
+      }
       $user->roles()->sync([ $role ]);
     }
 
@@ -110,7 +114,7 @@ class UsersController extends Controller {
     }
 
     $league_id = !is_null( $user->league ) ? $user->league->id : 0;
-    $role_id = $user->roles()->first()->id;
+    $role_id = $user->role()->id;
     return view('users.edit', compact('user', 'league_id', 'role_id') );
   }
 
@@ -142,6 +146,10 @@ class UsersController extends Controller {
 
     if( $role = $request->input('role') )
     {
+      if( $role > Auth::user()->role()->id )
+      {
+        \App::abort(403);
+      }
       $user->roles()->sync([ $role ]);
     }
 

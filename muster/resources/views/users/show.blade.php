@@ -7,7 +7,7 @@
       <a href="{{ route('users.edit', [ $user->id ] ) }}">edit</a>
     @endif
   </h2>
-  <p>{{ $user->roles()->first()->name }}</p>
+  <p>{{ $user->role()->display_name }}</p>
   <p><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></p>
   @if( $user->league )
     <h3>League</h3>
