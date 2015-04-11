@@ -14,7 +14,6 @@ class LeaguesController extends Controller {
 
   protected $rules = [
     'name' => ['required', 'min:3'],
-    'slug' => ['required'],
   ];
 
   /**

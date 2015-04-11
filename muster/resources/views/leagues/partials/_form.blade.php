@@ -4,11 +4,6 @@
 </div>
 
 <div class="form-group">
-  {!! Form::label('slug', 'Slug:') !!}
-  {!! Form::text('slug') !!}
-</div>
-
-<div class="form-group">
   {!! Form::label('user_id', 'User:') !!}
   {!! Form::select('user_id', $league->usersUpForGrabs(), $user_id ) !!}
 </div>
