@@ -166,11 +166,10 @@ class ChartersController extends Controller {
     $charter->save();
 
     $user = Auth::user();
-    $charter_url = env('APP_URL') . '/leagues/' . $league->slug . '/charters/' . $charter->slug;
-    \Mail::send('emails.charter_submitted', ['name' => $user->name, 'charter' => $charter, 'charter_url' => $charter_url ], function( $message )use( $user ){
+    \Mail::send('emails.charter_submitted', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user ){
       $message->to( $user->email, $user->name )->subject('Charter Submitted for Approval');
     });
-    \Mail::send('emails.charter_submitted', ['name' => env('MAIL_FROM_NAME'), 'charter' => $charter, 'charter_url' => $charter_url ], function( $message ){
+    \Mail::send('emails.charter_submitted', ['name' => env('MAIL_FROM_NAME'), 'charter' => $charter ], function( $message ){
       $message->to( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME') )->subject('Charter Submitted for Approval');
     });
 
@@ -204,6 +203,14 @@ class ChartersController extends Controller {
     $charter->update( array_except( Input::all(), '_method') );
     $charter->approved_at = \Carbon\Carbon::now();
     $charter->save();
+
+    if( $league->user_id )
+    {
+      $user = $league->user;
+      \Mail::send('emails.charter_approved', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user ){
+        $message->to( $user->email, $user->name )->subject('Charter Approved');
+      });
+    }
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'approved', $charter ) );
 
