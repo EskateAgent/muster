@@ -13,6 +13,11 @@ class Charter extends Model {
     return $this->belongsTo('App\League');
   }
 
+  public function charter_type()
+  {
+    return $this->belongsTo('App\CharterType');
+  }
+
   public function skaters()
   {
     return $this->hasMany('App\Skater')->limit(20)->orderBy('number');
