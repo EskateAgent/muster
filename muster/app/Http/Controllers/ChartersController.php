@@ -144,12 +144,12 @@ class ChartersController extends Controller {
    */
   public function requestApproval( $league, $charter )
   {
+    $league = League::whereSlug( $league )->first();
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
       \App::abort(403);
     }
 
-    $league = League::whereSlug( $league )->first();
     $charter = Charter::whereLeagueId( $league->id )->whereSlug( $charter )->first();
 
     if( $charter->approved_at )
@@ -164,6 +164,15 @@ class ChartersController extends Controller {
 
     $charter->approval_requested_at = \Carbon\Carbon::now();
     $charter->save();
+
+    $user = Auth::user();
+    $charter_url = env('APP_URL') . '/leagues/' . $league->slug . '/charters/' . $charter->slug;
+    \Mail::send('emails.charter_submitted', ['name' => $user->name, 'charter' => $charter, 'charter_url' => $charter_url ], function( $message )use( $user ){
+      $message->to( $user->email, $user->name )->subject('Charter Submitted for Approval');
+    });
+    \Mail::send('emails.charter_submitted', ['name' => env('MAIL_FROM_NAME'), 'charter' => $charter, 'charter_url' => $charter_url ], function( $message ){
+      $message->to( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME') )->subject('Charter Submitted for Approval');
+    });
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'requested-approval', $charter ) );
 
