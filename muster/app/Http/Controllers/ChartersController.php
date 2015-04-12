@@ -243,6 +243,14 @@ class ChartersController extends Controller {
     $charter->approval_requested_at = null;
     $charter->save();
 
+    if( $league->user_id )
+    {
+      $user = $league->user;
+      \Mail::send('emails.charter_rejected', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user ){
+        $message->to( $user->email, $user->name )->subject('Charter Could Not Be Approved');
+      });
+    }
+
     $this->dispatch( new LogEventCommand( Auth::user(), 'rejected', $charter ) );
 
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been rejected!');
