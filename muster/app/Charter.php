@@ -46,4 +46,14 @@ class Charter extends Model {
   {
     return env('APP_URL') . '/leagues/' . $this->league->slug . '/charters/' . $this->slug;
   }
+
+  public function types()
+  {
+    $charter_types = array();
+    foreach( \App\CharterType::all() as $charter_type )
+    {
+      $charter_types[ $charter_type->id ] = $charter_type->name;
+    }
+    return $charter_types;
+  }
 }
