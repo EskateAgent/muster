@@ -20,6 +20,7 @@ class HomeController extends Controller {
   public function index()
   {
     $leagues = \App\League::all();
-    return view('home', compact('leagues') );
+    $charter_types = \App\CharterType::all();
+    return view('home', compact('leagues', 'charter_types') );
   }
 }

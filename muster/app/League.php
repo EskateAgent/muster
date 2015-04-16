@@ -22,9 +22,14 @@ class League extends Model {
     return $this->charters()->whereNotNull('active_from')->orderBy('active_from', 'desc');
   }
 
-  public function currentCharter()
+  public function currentCharter( $type_id = null )
   {
-    return $this->approvedCharters()->where('active_from', '<=', date('c') )->first();
+    $charters = $this->approvedCharters()->where('active_from', '<=', date('c') );
+    if( $type_id )
+    {
+      $charters->where('charter_type_id', '=', $type_id );
+    }
+    return $charters->first();
   }
 
   public function draftCharter()

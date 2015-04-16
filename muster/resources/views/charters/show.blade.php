@@ -2,7 +2,7 @@
 
 @section('content')
 
-  <h2><a href="{{ route('leagues.show', [ $league->slug ] ) }}">{{ $league->name }}</a> - {{ $charter->name }}</h2>
+  <h2><a href="{{ route('leagues.show', [ $league->slug ] ) }}">{{ $league->name }}</a> - {{ $charter->name }} <small>({{ $charter->charter_type->name }})</small></h2>
   @if( !$charter->active_from && ( $reason = $charter->rejection_reason ) )
     <p>Charter submission was rejected: {{ $reason }}</p>
   @endif
