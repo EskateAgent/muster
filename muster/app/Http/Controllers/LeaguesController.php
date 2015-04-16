@@ -68,7 +68,8 @@ class LeaguesController extends Controller {
    */
   public function show( League $league )
   {
-    return view('leagues.show', compact('league') );
+    $charter_types = \App\CharterType::all();
+    return view('leagues.show', compact('league', 'charter_types') );
   }
 
   /**

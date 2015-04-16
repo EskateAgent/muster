@@ -12,9 +12,11 @@
   @endif
 
   <h3>Charters</h3>
-  @if( !$league->charters->count() )
-    <p>{{ $league->name }} has not submitted any charters.</p>
-  @endif
+  @foreach( $charter_types as $type )
+    @if( !$league->charters( $type->id )->count() )
+      <p>{{ $league->name }} has not submitted any {{ $type->name }} charters.</p>
+    @endif
+  @endforeach
 
   @if( Auth::user()->can('charter-create') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     <p><a href="{{ route('leagues.charters.create', [ $league->slug ] ) }}">create new charter</a>
