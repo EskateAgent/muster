@@ -24,7 +24,7 @@
       {!! Form::model( $charter, ['method' => 'PATCH', 'route' => ['leagues.charters.approve', $league->slug, $charter->slug ] ] ) !!}
         <div class="form-group">
           {!! Form::label('active_from', 'Active From:') !!}
-          {!! Form::date('active_from', \Carbon\Carbon::now()->addDays( count( $league->approvedCharters() ) ? 30 : 0 ) ) !!}
+          {!! Form::date('active_from', \Carbon\Carbon::now()->addDays( $league->approvedCharters( $charter->charter_type_id )->count() ? 30 : 0 ) ) !!}
         </div>
         <div class="form-group">
           {!! Form::submit('Approve', ['class' => 'btn primary'] ) !!}
