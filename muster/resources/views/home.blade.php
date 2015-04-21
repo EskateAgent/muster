@@ -10,12 +10,12 @@
       <thead>
         <tr>
           <th rowspan="2">League</th>
-          <th colspan="{{ count( $charter_types ) }}">Charters</th>
+          <th colspan="{{ count( $charter_types ) }}">Current Charters</th>
           <th rowspan="2">User</th>
         </tr>
         <tr>
           @foreach( $charter_types as $type )
-          <th>{{ $type->name }}</th>
+            <th>{{ $type->name }}</th>
           @endforeach
         </tr>
       </thead>
