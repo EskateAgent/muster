@@ -28,6 +28,7 @@ class AddUserToLeague extends Migration {
   {
     Schema::table('leagues', function(Blueprint $table)
     {
+      $table->dropForeign('leagues_user_id_foreign');
       $table->dropColumn('user_id');
     });
   }

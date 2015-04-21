@@ -2,6 +2,7 @@
 
 use App\League;
 use App\Charter;
+use App\CharterType;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
@@ -14,8 +15,9 @@ use App\Commands\LogEventCommand;
 class ChartersController extends Controller {
 
   protected $rules = [
-    'name' => ['required', 'min:3'],
-    'csv'  => ['required'],
+    'name'            => ['required', 'min:3'],
+    'charter_type_id' => ['required'],
+    'csv'             => ['required'],
   ];
 
   /**

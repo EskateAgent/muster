@@ -13,6 +13,11 @@ class Charter extends Model {
     return $this->belongsTo('App\League');
   }
 
+  public function charter_type()
+  {
+    return $this->belongsTo('App\CharterType');
+  }
+
   public function skaters()
   {
     return $this->hasMany('App\Skater')->limit(20)->orderBy('number');
@@ -40,5 +45,15 @@ class Charter extends Model {
   public function canonicalUrl()
   {
     return env('APP_URL') . '/leagues/' . $this->league->slug . '/charters/' . $this->slug;
+  }
+
+  public function types()
+  {
+    $charter_types = array();
+    foreach( \App\CharterType::all() as $charter_type )
+    {
+      $charter_types[ $charter_type->id ] = $charter_type->name;
+    }
+    return $charter_types;
   }
 }

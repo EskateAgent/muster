@@ -4,6 +4,11 @@
 </div>
 
 <div class="form-group">
+  {!! Form::label('charter_type_id', 'Type:') !!}
+  {!! Form::select('charter_type_id', $charter->types(), $charter_type_id ) !!}
+</div>
+
+<div class="form-group">
   {!! Form::label('csv', 'CSV File:') !!}
   {!! Form::file('csv') !!}
 </div>

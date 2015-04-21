@@ -1,5 +1,6 @@
 <?php namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -12,39 +13,44 @@ class League extends Model {
     return $this->belongsTo('App\User');
   }
 
-  public function charters()
+  public function charters( $type_id = null )
   {
-    return $this->hasMany('App\Charter')->limit(20);
+    $charters = $this->hasMany('App\Charter')->limit(20);
+    if( $type_id )
+    {
+      $charters->where('charter_type_id', '=', $type_id );
+    }
+    return $charters;
   }
 
-  public function approvedCharters()
+  public function approvedCharters( $type_id = null )
   {
-    return $this->charters()->whereNotNull('active_from')->orderBy('active_from', 'desc');
+    return $this->charters( $type_id )->whereNotNull('active_from')->orderBy('active_from', 'desc');
   }
 
-  public function currentCharter()
+  public function currentCharter( $type_id = null )
   {
-    return $this->approvedCharters()->where('active_from', '<=', date('c') )->first();
+    return $this->approvedCharters( $type_id )->where('active_from', '<=', Carbon::now() )->first();
   }
 
-  public function draftCharter()
+  public function draftCharter( $type_id = null )
   {
-    return $this->charters()->whereNull('active_from')->whereNull('approval_requested_at')->first();
+    return $this->charters( $type_id )->whereNull('active_from')->whereNull('approval_requested_at')->first();
   }
 
-  public function historicalCharters()
+  public function historicalCharters( $type_id = null )
   {
-    return $this->approvedCharters()->where('active_from', '<=', date('c') )->take(10)->skip(1)->get();
+    return $this->approvedCharters( $type_id )->where('active_from', '<=', Carbon::now() )->take(10)->skip(1)->get();
   }
 
-  public function pendingCharter()
+  public function pendingCharter( $type_id = null )
   {
-    return $this->charters()->whereNull('active_from')->whereNotNull('approval_requested_at')->first();
+    return $this->charters( $type_id )->whereNull('active_from')->whereNotNull('approval_requested_at')->first();
   }
 
-  public function upcomingCharter()
+  public function upcomingCharter( $type_id = null )
   {
-    return $this->approvedCharters()->where('active_from', '>', date('c') )->first();
+    return $this->approvedCharters( $type_id )->where('active_from', '>', Carbon::now() )->first();
   }
 
   public function usersUpForGrabs()
