@@ -68,6 +68,11 @@ class LeaguesController extends Controller {
    */
   public function show( League $league )
   {
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     $charter_types = \App\CharterType::all();
     return view('leagues.show', compact('league', 'charter_types') );
   }
@@ -80,11 +85,16 @@ class LeaguesController extends Controller {
    */
   public function edit( League $league )
   {
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     $user_id = !is_null( $league->user_id ) ? $league->user_id : 0;
 
     if( !( ( Auth::user()->id == $user_id ) || Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
     {
-      \App::abort(403);
+      abort(404);
     }
 
     return view('leagues.edit', compact('league', 'user_id') );
@@ -99,11 +109,16 @@ class LeaguesController extends Controller {
    */
   public function update( League $league, Request $request )
   {
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     $user_id = !is_null( $league->user_id ) ? $league->user_id : 0;
 
     if( !( ( Auth::user()->id == $user_id ) || Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
     {
-      \App::abort(403);
+      abort(404);
     }
 
     $this->validate( $request, $this->rules );

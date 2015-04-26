@@ -40,9 +40,14 @@ class ChartersController extends Controller {
    */
   public function create( League $league )
   {
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      \App::abort(403);
+      abort(404);
     }
 
     return view('charters.create', compact('league') );
@@ -56,9 +61,14 @@ class ChartersController extends Controller {
    */
   public function store( League $league, Request $request )
   {
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      \App::abort(403);
+      abort(404);
     }
 
     $this->validate( $request, $this->rules );
@@ -81,6 +91,11 @@ class ChartersController extends Controller {
    */
   public function show( League $league, Charter $charter )
   {
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     if( $charter->league != $league )
     {
       return Redirect::route('leagues.show', $league->slug )->with('message', 'Charter not found!');
@@ -88,7 +103,7 @@ class ChartersController extends Controller {
 
     if( !( ( $league->currentCharter() && ( $league->currentCharter()->id == $charter->id ) ) || ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('staff') || Auth::user()->hasRole('root') ) )
     {
-      \App::abort(403);
+      abort(404);
     }
 
     return view('charters.show', compact('league', 'charter') );
@@ -103,9 +118,14 @@ class ChartersController extends Controller {
    */
   public function edit( League $league, Charter $charter )
   {
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      \App::abort(403);
+      abort(404);
     }
 
     return view('charters.edit', compact('league', 'charter') );
@@ -121,9 +141,14 @@ class ChartersController extends Controller {
    */
   public function update( League $league, Charter $charter, Request $request )
   {
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      \App::abort(403);
+      abort(404);
     }
 
     $this->validate( $request, $this->rules );
@@ -147,9 +172,15 @@ class ChartersController extends Controller {
   public function requestApproval( $league, $charter )
   {
     $league = League::whereSlug( $league )->first();
+
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      \App::abort(403);
+      abort(404);
     }
 
     $charter = Charter::whereLeagueId( $league->id )->whereSlug( $charter )->first();
@@ -190,6 +221,12 @@ class ChartersController extends Controller {
   public function approve( $league, $charter )
   {
     $league = League::whereSlug( $league )->first();
+
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     $charter = Charter::whereLeagueId( $league->id )->whereSlug( $charter )->first();
 
     if( $charter->approved_at )
@@ -229,6 +266,12 @@ class ChartersController extends Controller {
   public function reject( $league, $charter )
   {
     $league = League::whereSlug( $league )->first();
+
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
     $charter = Charter::whereLeagueId( $league->id )->whereSlug( $charter )->first();
 
     if( $charter->approved_at )

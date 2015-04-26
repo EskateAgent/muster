@@ -69,7 +69,7 @@ class UsersController extends Controller {
     {
       if( $role > Auth::user()->role()->id )
       {
-        \App::abort(403);
+        abort(404);
       }
       $user->roles()->sync([ $role ]);
     }
@@ -97,6 +97,11 @@ class UsersController extends Controller {
    */
   public function show( User $user )
   {
+    if( !$user->id )
+    {
+      abort(404);
+    }
+
     return view('users.show', compact('user') );
   }
 
@@ -108,9 +113,14 @@ class UsersController extends Controller {
    */
   public function edit( User $user )
   {
+    if( !$user->id )
+    {
+      abort(404);
+    }
+
     if( !( ( Auth::user()->id == $user->id ) || Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
     {
-      \App::abort(403);
+      abort(404);
     }
 
     $league_id = !is_null( $user->league ) ? $user->league->id : 0;
@@ -127,9 +137,14 @@ class UsersController extends Controller {
    */
   public function update( User $user, Request $request )
   {
+    if( !$user->id )
+    {
+      abort(404);
+    }
+
     if( !( ( Auth::user()->id == $user->id ) || Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
     {
-      \App::abort(403);
+      abort(404);
     }
 
     if( $league_id = $request->input('league_id') )
@@ -148,7 +163,7 @@ class UsersController extends Controller {
     {
       if( $role > Auth::user()->role()->id )
       {
-        \App::abort(403);
+        abort(404);
       }
       $user->roles()->sync([ $role ]);
     }
@@ -166,6 +181,6 @@ class UsersController extends Controller {
 
   protected function generateTemporaryPassword()
   {
-    return substr( str_shuffle( md5( microtime() ) ), 0, 8 );
+    return substr( str_shuffle( md5( microtime() ) ), 0, 12 );
   }
 }
