@@ -15,7 +15,7 @@
 
           @if( $upcoming = $league->upcomingCharter( $type->id ) )
             <h4>Upcoming</h4>
-            <p><a href="{{ route('leagues.charters.show', [ $league->slug, $upcoming->slug ] ) }}">{{ $upcoming->name }}</a> (becomes active {{ $upcoming->active_from }})</p>
+            <p><a href="{{ route('leagues.charters.show', [ $league->slug, $upcoming->slug ] ) }}">{{ $upcoming->name }}</a> (becomes active {{ $upcoming->active_from->toDateString() }})</p>
           @endif
 
           @if( ( $league->historicalCharters( $type->id )->count() ) )
