@@ -2,11 +2,11 @@
 
 @section('content')
   <div class="page-header">
-    <h1>All Leagues</h1>
+    <h1>All leagues</h1>
   </div>
 
   @if( !$leagues->count() )
-    <p>No leagues</p>
+    <p>None found!</p>
   @else
     <table class="table table-striped">
       <thead>

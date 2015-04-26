@@ -1,13 +1,13 @@
 <div class="form-group">
   {!! Form::label('name', 'Name:') !!}
-  {!! Form::text('name') !!}
+  {!! Form::text('name', null, array('class' => 'form-control') ) !!}
 </div>
 
 <div class="form-group">
   {!! Form::label('user_id', 'User:') !!}
-  {!! Form::select('user_id', $league->usersUpForGrabs(), $user_id ) !!}
+  {!! Form::select('user_id', $league->usersUpForGrabs(), $user_id, array('class' => 'form-control') ) !!}
 </div>
 
 <div class="form-group">
-  {!! Form::submit('Save', ['class' => 'btn primary'] ) !!}
+  {!! Form::submit('Save', ['class' => 'btn btn-primary'] ) !!}
 </div>

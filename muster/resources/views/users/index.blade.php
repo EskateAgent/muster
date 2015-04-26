@@ -1,13 +1,17 @@
 @extends('app')
 
 @section('content')
-  <h2>Users</h2>
-  @if( Auth::user()->can('user-create') )
-    <a href="{{ route('users.create') }}">create new</a>
-  @endif
+  <div class="page-header">
+    <h1>
+      Users
+      @if( Auth::user()->can('user-create') )
+        <small><a href="{{ route('users.create') }}">create new</a></small>
+      @endif
+    </h1>
+  </div>
 
   @if( !$users->count() )
-    None
+    <p>None found!</p>
   @else
     <ul>
       @foreach( $users as $user )
