@@ -37,6 +37,9 @@
               @if( Auth::user()->can('user-show') )
                 <li><a href="{{ route('users.index') }}">Users</a></li>
               @endif
+              @if( Auth::user()->can('event-show') )
+                <li><a href="{{ route('events.index') }}">Audit Log</a></li>
+              @endif
             </ul>
 
             <ul class="nav navbar-nav navbar-right">

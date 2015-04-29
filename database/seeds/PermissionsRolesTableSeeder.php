@@ -27,6 +27,7 @@ class PermissionsRolesTableSeeder extends Seeder {
       ['role_id' => 1, 'permission_id' => 14 ], // charter-request_approval
       ['role_id' => 1, 'permission_id' => 15 ], // charter-approve
       ['role_id' => 1, 'permission_id' => 16 ], // charter-reject
+      ['role_id' => 1, 'permission_id' => 17 ], // event-show
 
       // staff
       ['role_id' => 2, 'permission_id' => 1 ],  // home
@@ -39,6 +40,7 @@ class PermissionsRolesTableSeeder extends Seeder {
       ['role_id' => 2, 'permission_id' => 10 ], // charter-show
       ['role_id' => 2, 'permission_id' => 15 ], // charter-approve
       ['role_id' => 2, 'permission_id' => 16 ], // charter-reject
+      ['role_id' => 2, 'permission_id' => 17 ], // event-show
 
       // league
       ['role_id' => 3, 'permission_id' => 1 ],  // home

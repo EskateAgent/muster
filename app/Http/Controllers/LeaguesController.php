@@ -23,7 +23,7 @@ class LeaguesController extends Controller {
    */
   public function index()
   {
-    $leagues = League::all();
+    $leagues = League::all()->sortBy('name');
     return view('leagues.index', compact('leagues') );
   }
 

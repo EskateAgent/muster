@@ -29,6 +29,8 @@ class PermissionsTableSeeder extends Seeder {
       ['id' => 14, 'name' => 'charter-request_approval', 'display_name' => 'Request Approval', 'Description' => 'request approval for charters', 'created_at' => new DateTime, 'updated_at' => new DateTime ],
       ['id' => 15, 'name' => 'charter-approve',          'display_name' => 'Approve Charter',  'Description' => 'approve charters',              'created_at' => new DateTime, 'updated_at' => new DateTime ],
       ['id' => 16, 'name' => 'charter-reject',           'display_name' => 'Reject Charter',   'Description' => 'reject charters',               'created_at' => new DateTime, 'updated_at' => new DateTime ],
+
+      ['id' => 17, 'name' => 'event-show',               'display_name' => 'Show Event',       'Description' => 'view audit log events',         'created_at' => new DateTime, 'updated_at' => new DateTime ],
     );
 
     // Uncomment the below to run the seeder

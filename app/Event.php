@@ -8,4 +8,10 @@ class Event extends Model {
   {
     return $this->hasOne('App\User');
   }
+
+  public function subject()
+  {
+    $class = $this->subject;
+    return $class::findOrFail( $this->subject_id );
+  }
 }

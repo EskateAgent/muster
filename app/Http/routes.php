@@ -13,6 +13,12 @@
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
 
+Route::model('events', 'Event');
+Route::resource('events', 'EventsController');
+Route::bind('events', function( $id ){
+  return App\Event::whereId( $id )->first();
+});
+
 Route::model('users', 'User');
 Route::resource('users', 'UsersController');
 Route::bind('users', function( $id ){
