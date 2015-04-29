@@ -36,6 +36,7 @@ class UsersController extends Controller {
   {
     $user = new User;
     $role_id = null;
+
     return view('users.create', compact('user', 'role_id') );
   }
 
@@ -59,7 +60,6 @@ class UsersController extends Controller {
     $this->validate( $request, $this->rules );
 
     $user = User::create( Input::all() );
-
     $password = $this->generateTemporaryPassword();
     $user->password = \Hash::make( $password );
 
@@ -67,7 +67,7 @@ class UsersController extends Controller {
 
     if( $role = $request->input('role') )
     {
-      if( $role > Auth::user()->role()->id )
+      if( $role < Auth::user()->role()->id )
       {
         abort(404);
       }
