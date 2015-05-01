@@ -26,6 +26,7 @@
             <td>
               <?php
                 $subject = $event->subject();
+                $route = '/';
                 switch( get_class( $subject ) )
                 {
                   case 'App\Charter':
@@ -39,9 +40,6 @@
                   case 'App\User':
                     $route = route('users.show', [ $subject->id ] );
                     break;
-
-                  default:
-                    d( get_class( $subject ) );
 
                 }
               ?>
