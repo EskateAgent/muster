@@ -1192,7 +1192,7 @@ a.bg-danger:hover {
 }
 .page-header {
   padding-bottom: 9px;
-  margin: 80px 0 20px;
+  margin: 30px 0 20px;
   border-bottom: 1px solid #eeeeee;
 }
 ul,
@@ -1388,6 +1388,9 @@ pre code {
   margin-left: auto;
   padding-left: 15px;
   padding-right: 15px;
+}
+.container[role="main"] {
+  padding-top: 50px;
 }
 .row {
   margin-left: -15px;
@@ -6230,4 +6233,10 @@ body,
 label,
 .checkbox label {
   font-weight: 300;
+}
+.flash {
+  padding: 20px 20px 10px;
+  margin: 10px 0;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
