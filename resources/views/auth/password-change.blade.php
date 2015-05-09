@@ -6,7 +6,7 @@
   </div>
 
   <form action="/auth/password-change" method="post">
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+    {!! Form::hidden('_token', csrf_token() ) !!}
 
     <div class="form-group">
       {!! Form::label('current', 'Current password:') !!}

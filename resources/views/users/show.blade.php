@@ -10,7 +10,8 @@
     </h1>
 
     @if( Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) )
-      <form action="/auth/reset-password" method="post">
+      <form action="/auth/password-reset" method="post">
+        {!! Form::hidden('_token', csrf_token() ) !!}
         {!! Form::hidden('user_id', $user->id ) !!}
 
         {!! Form::submit("Reset user's password", ['class' => 'btn btn-danger', ''] ) !!}
