@@ -60,7 +60,7 @@ class UsersController extends Controller {
     $this->validate( $request, $this->rules );
 
     $user = User::create( Input::all() );
-    $password = $this->generateTemporaryPassword();
+    $password = User::generateTemporaryPassword();
     $user->password = \Hash::make( $password );
 
     $user->save();
@@ -177,10 +177,5 @@ class UsersController extends Controller {
     $this->dispatch( new LogEventCommand( Auth::user(), 'updated', $user ) );
 
     return Redirect::route('users.show', $user->id )->with('message', 'User has been updated');
-  }
-
-  protected function generateTemporaryPassword()
-  {
-    return substr( str_shuffle( md5( microtime() ) ), 0, 12 );
   }
 }

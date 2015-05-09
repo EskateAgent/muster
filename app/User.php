@@ -69,4 +69,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     }
     return $roles;
   }
+
+  public static function generateTemporaryPassword()
+  {
+    return substr( str_shuffle( md5( microtime() ) ), 0, 12 );
+  }
+
 }

@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Auth;
 
+use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\Auth\Guard;
@@ -8,6 +9,7 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use Auth;
 use Input;
 use Redirect;
+use App\Commands\LogEventCommand;
 
 class AuthController extends Controller {
 
@@ -105,6 +107,24 @@ class AuthController extends Controller {
 
   public function postPasswordReset( Request $request )
   {
-    d('password reset');
+    $user = User::findOrFail( $request->input('user_id') );
+
+    if( !( Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
+    {
+      abort(404);
+    }
+
+    $password = User::generateTemporaryPassword();
+    $user->password = \Hash::make( $password );
+
+    $user->save();
+
+    $this->dispatch( new LogEventCommand( Auth::user(), 'reset-password', $user ) );
+
+    \Mail::send('emails.password-reset', ['name' => $user->name, 'password' => $password ], function( $message )use( $user ){
+      $message->to( $user->email, $user->name )->subject('Your Password Has Been Reset');
+    });
+
+    return Redirect::route('users.show', $user->id )->with('message', "User's password has been reset and emailed to them.");
   }
 }
