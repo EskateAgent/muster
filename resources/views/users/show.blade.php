@@ -8,6 +8,14 @@
         <small><a href="{{ route('users.edit', [ $user->id ] ) }}">edit</a></small>
       @endif
     </h1>
+
+    @if( Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) )
+      <form action="/auth/reset-password" method="post">
+        {!! Form::hidden('user_id', $user->id ) !!}
+
+        {!! Form::submit("Reset user's password", ['class' => 'btn btn-danger', ''] ) !!}
+      </form>
+    @endif
   </div>
   <p>{{ $user->role()->display_name }}</p>
   <p><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></p>
