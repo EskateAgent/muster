@@ -10,12 +10,12 @@
 
           @if( $current = $league->currentCharter( $type->id ) )
             <h4>Current</h4>
-            <p><a href="{{ route('leagues.charters.show', [ $league->slug, $current->slug ] ) }}">{{ $current->name }}</a></p>
+            <p><a href="{{ route('leagues.charters.show', [ $league->slug, $current->slug ] ) }}">{{ $current->name }}</a> (became active <span class="time" title="{{ $current->active_from->toDateString() }}">{{ $current->active_from->diffForHumans() }})</span></p>
           @endif
 
           @if( $upcoming = $league->upcomingCharter( $type->id ) )
             <h4>Upcoming</h4>
-            <p><a href="{{ route('leagues.charters.show', [ $league->slug, $upcoming->slug ] ) }}">{{ $upcoming->name }}</a> (becomes active {{ $upcoming->active_from->toDateString() }})</p>
+            <p><a href="{{ route('leagues.charters.show', [ $league->slug, $upcoming->slug ] ) }}">{{ $upcoming->name }}</a> (will become active <span class="time" title="{{ $upcoming->active_from->toDateString() }}">{{ $upcoming->active_from->diffForHumans() }})</span></p>
           @endif
 
           @if( ( $league->historicalCharters( $type->id )->count() ) )
