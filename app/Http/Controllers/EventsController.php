@@ -15,7 +15,7 @@ class EventsController extends Controller {
    */
   public function index()
   {
-    $events = Event::all()->sortBy('created_at DESC')->take(100);
+    $events = Event::all()->sortByDesc('created_at')->take(100);
     return view('events.index', compact('events') );
   }
 }
