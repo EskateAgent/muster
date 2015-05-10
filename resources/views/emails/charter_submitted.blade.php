@@ -2,8 +2,6 @@
 
 @section('content')
 
-  <p>A new charter for {{ $charter->league->name }} has been submitted for approval.</p>
-
-  <p>You can view the charter by visting this link: <a href="{{ $charter->canonicalUrl() }}">{{ $charter->canonicalUrl() }}</a>.</p>
+  <p>Charter <a href="{{ $charter->canonicalUrl() }}">{{ $charter->name }}</a> belonging to <a href="{{ $charter->league->canonicalUrl() }}">{{ $charter->league->name }}</a> has been submitted for approval.</p>
 
 @endsection
