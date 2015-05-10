@@ -67,6 +67,10 @@
     @endif
   @endif
 
+  @if( $charter->active_from )
+    <p>Charter {{ $charter->active_from < \Carbon\Carbon::now() ? 'became' : 'will become' }} active <span class="time" title="{{ $charter->active_from->toDateString() }}">{{ $charter->active_from->diffForHumans() }}</span></p>
+  @endif
+
   @if( !$charter->skaters->count() )
     <p>{{ $charter->name }} contains no skaters.</p>
   @else
