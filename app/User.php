@@ -75,4 +75,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     return substr( str_shuffle( md5( microtime() ) ), 0, 12 );
   }
 
+  public function canonicalUrl()
+  {
+    return env('APP_URL') . '/users/' . $this->id;
+  }
 }

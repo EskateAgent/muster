@@ -79,4 +79,9 @@ class League extends Model {
     ksort( $users );
     return $users;
   }
+
+  public function canonicalUrl()
+  {
+    return env('APP_URL') . '/leagues/' . $this->slug;
+  }
 }

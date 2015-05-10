@@ -14,4 +14,9 @@ class Event extends Model {
     $class = $this->subject;
     return $class::findOrFail( $this->subject_id );
   }
+
+  public function canonicalUrl()
+  {
+    return env('APP_URL') . '/events/' . $this->id;
+  }
 }

@@ -44,7 +44,7 @@ class Charter extends Model {
 
   public function canonicalUrl()
   {
-    return env('APP_URL') . '/leagues/' . $this->league->slug . '/charters/' . $this->slug;
+    return $this->league->canonicalUrl() . '/charters/' . $this->slug;
   }
 
   public function types()
