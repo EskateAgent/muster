@@ -1,12 +1,15 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Charter extends Model {
 
+  use SoftDeletes;
+
   protected $guarded = ['id'];
 
-  protected $dates = ['approved_at', 'approval_requested_at', 'active_from'];
+  protected $dates = ['approved_at', 'approval_requested_at', 'active_from', 'deleted_at'];
 
   public function league()
   {
