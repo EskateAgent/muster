@@ -163,6 +163,36 @@ class ChartersController extends Controller {
   }
 
   /**
+   * Soft delete the specified resource from storage.
+   *
+   * @param  League $league
+   * @param  Charter $charter
+   * @return Response
+   */
+  public function destroy( League $league, Charter $charter )
+  {
+    if( !$league->id )
+    {
+      abort(404);
+    }
+
+    if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
+    {
+      abort(404);
+    }
+
+    if( ( $charter->deleted_at || $charter->approval_requested_at ) && !Auth::user()->hasRole('root') )
+    {
+      abort(404);
+    }
+
+    $charter->delete();
+    $this->dispatch( new LogEventCommand( Auth::user(), 'deleted', $charter ) );
+
+    return Redirect::route('leagues.show', [ $league->slug ] )->with('message', 'Charter has been deleted');
+  }
+
+  /**
    * Request that the charter be approved
    *
    * @param  string $league
