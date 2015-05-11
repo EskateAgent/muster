@@ -19,7 +19,7 @@
       </thead>
       <tbody>
         @foreach( $events as $event )
-          <?php $user = \App\User::findOrFail( $event->user_id );?>
+          <?php $user = \App\User::withTrashed()->findOrFail( $event->user_id );?>
           <tr>
             <td><a href="{{ route('users.show', [ $user->id ] ) }}">{{ $user->name }}</a></td>
             <td>{{ str_replace('-', ' ', $event->operation ) }}</td>

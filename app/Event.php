@@ -12,7 +12,7 @@ class Event extends Model {
   public function subject()
   {
     $class = $this->subject;
-    return $class::findOrFail( $this->subject_id );
+    return $class::withTrashed()->findOrFail( $this->subject_id );
   }
 
   public function canonicalUrl()
