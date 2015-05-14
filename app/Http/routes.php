@@ -18,6 +18,11 @@ Route::resource('users', 'UsersController');
 Route::resource('leagues', 'LeaguesController');
 Route::resource('leagues.charters', 'ChartersController');
 
+Route::patch('leagues/{league}/restore', [
+  'as'   => 'leagues.restore',
+  'uses' => 'LeaguesController@restore',
+]);
+
 Route::patch('leagues/{league}/charters/{charter}/request-approval', [
   'as'   => 'leagues.charters.request_approval',
   'uses' => 'ChartersController@requestApproval',

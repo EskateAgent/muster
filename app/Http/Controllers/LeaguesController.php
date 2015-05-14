@@ -154,4 +154,25 @@ class LeaguesController extends Controller {
 
     return Redirect::route('leagues.show', [ $league->slug ] )->with('message', 'League has been deleted');
   }
+
+  /**
+   * Restore the specified resource from having been soft-deleted
+   *
+   * @param  String $slug
+   * @return Response
+   */
+  public function restore( $slug )
+  {
+    $league = League::onlyTrashed()->whereSlug( $slug )->first();
+
+    if( !$league->id || !Auth::user()->can('league-create') || !$league->deleted_at )
+    {
+      abort(404);
+    }
+
+    $league->restore();
+    $this->dispatch( new LogEventCommand( Auth::user(), 'restored', $league ) );
+
+    return Redirect::route('leagues.show', [ $league->slug ] )->with('message', 'League has been restored');
+  }
 }

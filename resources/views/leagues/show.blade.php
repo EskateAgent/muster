@@ -16,6 +16,12 @@
     {!! Form::close() !!}
   @endif
 
+  @if( $league->deleted_at && ( Auth::user()->can('league-create') || ( Auth::user()->hasRole('root') ) ) )
+    {!! Form::model( $league, ['method' => 'patch', 'route' => ['leagues.restore', $league->slug ], 'style' => 'display: inline-block;' ] ) !!}
+      {!! Form::submit("Restore this league", ['class' => 'btn btn-success'] ) !!}
+    {!! Form::close() !!}
+  @endif
+
   @if( $league->user )
     <p>User: <a href="{{ route('users.show', $league->user_id ) }}">{{ $league->user->name }}</a>
   @endif
