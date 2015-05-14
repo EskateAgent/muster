@@ -135,4 +135,23 @@ class LeaguesController extends Controller {
 
     return Redirect::route('leagues.show', $league->slug )->with('message', 'League has been updated');
   }
+
+  /**
+   * Soft delete the specified resource from storage.
+   *
+   * @param  League $league
+   * @return Response
+   */
+  public function destroy( League $league )
+  {
+    if( !$league->id || !Auth::user()->can('league-destroy') || $league->deleted_at )
+    {
+      abort(404);
+    }
+
+    $league->delete();
+    $this->dispatch( new LogEventCommand( Auth::user(), 'deleted', $league ) );
+
+    return Redirect::route('leagues.show', [ $league->slug ] )->with('message', 'League has been deleted');
+  }
 }

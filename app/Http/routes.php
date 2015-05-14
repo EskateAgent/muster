@@ -13,30 +13,12 @@
 Route::get('/', 'WelcomeController@index');
 Route::get('home', 'HomeController@index');
 
-Route::model('events', 'Event');
 Route::resource('events', 'EventsController');
-Route::bind('events', function( $id ){
-  return App\Event::withTrashed()->whereId( $id )->first();
-});
-
-Route::model('users', 'User');
 Route::resource('users', 'UsersController');
-Route::bind('users', function( $id ){
-  return App\User::withTrashed()->whereId( $id )->first();
-});
-
-Route::model('leagues', 'League');
 Route::resource('leagues', 'LeaguesController');
-Route::bind('leagues', function( $slug ){
-  return App\League::withTrashed()->whereSlug( $slug )->first();
-});
-
-Route::model('leagues.charters', 'Charter');
 Route::resource('leagues.charters', 'ChartersController');
-Route::bind('charters', function( $slug ){
-  return App\Charter::withTrashed()->whereSlug( $slug )->first();
-});
-Route::get('leagues/{league}/charters/{charter}/request-approval', [
+
+Route::patch('leagues/{league}/charters/{charter}/request-approval', [
   'as'   => 'leagues.charters.request_approval',
   'uses' => 'ChartersController@requestApproval',
 ]);

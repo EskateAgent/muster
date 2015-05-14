@@ -10,6 +10,12 @@
     </h1>
   </div>
 
+  @if( !$league->deleted_at && ( Auth::user()->can('league-destroy') || ( Auth::user()->hasRole('root') ) ) )
+    {!! Form::model( $league, ['method' => 'delete', 'route' => ['leagues.destroy', $league->slug ], 'style' => 'display: inline-block;' ] ) !!}
+      {!! Form::submit("Delete this league", ['class' => 'btn btn-danger'] ) !!}
+    {!! Form::close() !!}
+  @endif
+
   @if( $league->user )
     <p>User: <a href="{{ route('users.show', $league->user_id ) }}">{{ $league->user->name }}</a>
   @endif

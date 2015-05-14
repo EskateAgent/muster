@@ -14,8 +14,14 @@
         {!! Form::hidden('_token', csrf_token() ) !!}
         {!! Form::hidden('user_id', $user->id ) !!}
 
-        {!! Form::submit("Reset user's password", ['class' => 'btn btn-danger', ''] ) !!}
+        {!! Form::submit("Reset user's password", ['class' => 'btn btn-warning', ''] ) !!}
       </form>
+    @endif
+
+    @if( $user->id != Auth::user()->id && ( Auth::user()->hasRole('root') || ( ( Auth::user()->hasRole('staff') || Auth::user()->hasPermission('user-destroy') ) && !$user->hasRole('root') ) ) )
+      {!! Form::model( $user, ['method' => 'delete', 'route' => ['users.destroy', $user->id ] ] ) !!}
+        {!! Form::submit("Delete user", ['class' => 'btn btn-danger', ''] ) !!}
+      {!! Form::close() !!}
     @endif
   </div>
   <p>{{ $user->role()->display_name }}</p>

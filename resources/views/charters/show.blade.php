@@ -11,7 +11,9 @@
 
   @if( !$charter->active_from && !$charter->approval_requested_at && !$charter->deleted_at )
     @if( Auth::user()->can('charter-request_approval') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
-      <a class="btn btn-success" href="{{ route('leagues.charters.request_approval', [ $league->slug, $charter->slug ]) }}">Submit for approval</a>
+      {!! Form::model( $charter, ['method' => 'patch', 'route' => ['leagues.charters.request_approval', $league->slug, $charter->slug ], 'style' => 'display: inline-block;' ] ) !!}
+        {!! Form::submit("Submit for approval", ['class' => 'btn btn-success'] ) !!}
+      {!! Form::close() !!}
     @endif
     @if( Auth::user()->can('charter-edit') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
       <a class="btn btn-default" href="{{ route('leagues.charters.edit', [ $league->slug, $charter->slug ] ) }}">Upload a new revision</a>
