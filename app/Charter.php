@@ -16,6 +16,11 @@ class Charter extends Model {
     return $this->belongsTo('App\League');
   }
 
+  public function events()
+  {
+    return $this->morphMany('App\Event', 'subject');
+  }
+
   public function charter_type()
   {
     return $this->belongsTo('App\CharterType');

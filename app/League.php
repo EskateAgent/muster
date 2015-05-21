@@ -18,6 +18,11 @@ class League extends Model {
     return $this->belongsTo('App\User');
   }
 
+  public function events()
+  {
+    return $this->morphMany('App\Event', 'subject');
+  }
+
   public function charters( $type_id = null )
   {
     $charters = $this->hasMany('App\Charter')->limit(20);

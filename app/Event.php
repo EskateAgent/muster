@@ -11,8 +11,7 @@ class Event extends Model {
 
   public function subject()
   {
-    $class = $this->subject;
-    return $class::withTrashed()->findOrFail( $this->subject_id );
+    return $this->morphTo()->withTrashed()->first();
   }
 
   public function canonicalUrl()
