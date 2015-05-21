@@ -155,10 +155,16 @@ class ChartersController extends Controller {
 
     $charter->update( array_except( Input::all(), '_method') );
 
-    $charter->replaceSkaters( $this->processFile( $request ) );
+    try
+    {
+      $charter->replaceSkaters( $this->processFile( $request ) );
+    }
+    catch( Exception $e )
+    {
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('error', $e->getMessage() );
+    }
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'updated', $charter ) );
-
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been updated');
   }
 
@@ -345,27 +351,46 @@ class ChartersController extends Controller {
       $file = $request->file('csv')->openFile();
       $headers = array();
       $name_index = $number_index = null;
-      $i = 0;
-      while( $row = $file->fgetcsv() )
+
+      $first_line = $file->fgets();
+
+      preg_match('/(["\'])([,;])["\']/', $first_line, $matches );
+
+      if( count( $matches ) !== 3 )
       {
-        if( $i > 30 )
+        throw new Exception('Invalid file!');
+      }
+
+      list( , $enclosure, $delimiter ) = $matches;
+
+      $file->rewind();
+      $i = 0;
+      while( $row = $file->fgetcsv( $delimiter, $enclosure ) )
+      {
+        $i++;
+
+        if( count( $row ) < 2 )
         {
-          break;
+          continue;
         }
 
-        if( count( $row ) > 3 )
+        if( ( $i > 50 ) || ( count( $skaters ) > 20 ) )
         {
-          if( !$headers )
+          throw new Exception('Invalid file!');
+        }
+
+        if( !$headers )
+        {
+          if( ( array_search('uniform_nbr', $row ) !== false ) && ( array_search('derby_name', $row ) !== false ) )
           {
             $headers = $row;
             $name_index = array_search('derby_name', $headers );
             $number_index = array_search('uniform_nbr', $headers );
-            continue;
           }
-
-          $skaters[] = array('name' => $row[ $name_index ], 'number' => $row[ $number_index ] );
+          continue;
         }
-        $i++;
+
+        $skaters[] = array('name' => $row[ $name_index ], 'number' => $row[ $number_index ] );
       }
     }
     return $skaters;
