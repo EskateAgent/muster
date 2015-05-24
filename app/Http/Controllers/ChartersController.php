@@ -15,7 +15,6 @@ use App\Commands\LogEventCommand;
 class ChartersController extends Controller {
 
   protected $rules = [
-    'name'            => ['required', 'min:3'],
     'charter_type_id' => ['required'],
     'csv'             => ['required'],
   ];
@@ -73,13 +72,13 @@ class ChartersController extends Controller {
 
     $this->validate( $request, $this->rules );
 
-    $charter = Charter::create( array_merge( Input::all(), array('league_id' => $league->id ) ) );
+    $charter = Charter::create( array_merge( Input::all(), array('league_id' => $league->id, 'name' => \Carbon\Carbon::now()->toDateString() ) ) );
 
     $charter->replaceSkaters( $this->processFile( $request ) );
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'stored', $charter ) );
 
-    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been created');
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has been created');
   }
 
   /**
@@ -165,7 +164,7 @@ class ChartersController extends Controller {
     }
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'updated', $charter ) );
-    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been updated');
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has been updated');
   }
 
   /**
@@ -195,7 +194,7 @@ class ChartersController extends Controller {
     $charter->delete();
     $this->dispatch( new LogEventCommand( Auth::user(), 'deleted', $charter ) );
 
-    return Redirect::route('leagues.show', [ $league->slug ] )->with('message', 'Charter has been deleted');
+    return Redirect::route('leagues.show', [ $league->slug ] )->with('message', 'Charter ' . $charter->name . ' has been deleted');
   }
 
   /**
@@ -223,12 +222,12 @@ class ChartersController extends Controller {
 
     if( $charter->approved_at )
     {
-      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has already been approved!');
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has already been approved!');
     }
 
     if( $charter->approval_requested_at )
     {
-      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'You have already requested approval for this charter!');
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'You have already requested approval for charter ' . $charter->name . '!');
     }
 
     $charter->approval_requested_at = \Carbon\Carbon::now();
@@ -236,15 +235,15 @@ class ChartersController extends Controller {
 
     $user = Auth::user();
     \Mail::send('emails.charter_submitted', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user ){
-      $message->to( $user->email, $user->name )->subject('Charter Submitted for Approval');
+      $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Submitted for Approval');
     });
     \Mail::send('emails.charter_submitted', ['name' => env('MAIL_FROM_NAME'), 'charter' => $charter ], function( $message ){
-      $message->to( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME') )->subject('Charter Submitted for Approval');
+      $message->to( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME') )->subject('Charter ' . $charter->name . ' Submitted for Approval');
     });
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'requested-approval', $charter ) );
 
-    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been submitted for approval');
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has been submitted for approval');
   }
 
   /**
@@ -267,12 +266,12 @@ class ChartersController extends Controller {
 
     if( $charter->approved_at )
     {
-      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has already been approved!');
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has already been approved!');
     }
 
     if( !$charter->approval_requested_at )
     {
-      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has not been submitted for approval!');
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has not been submitted for approval!');
     }
 
     $charter->update( array_except( Input::all(), '_method') );
@@ -283,13 +282,13 @@ class ChartersController extends Controller {
     {
       $user = $league->user;
       \Mail::send('emails.charter_approved', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user ){
-        $message->to( $user->email, $user->name )->subject('Charter Approved');
+        $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Approved');
       });
     }
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'approved', $charter ) );
 
-    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been approved');
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has been approved');
   }
 
   /**
@@ -312,12 +311,12 @@ class ChartersController extends Controller {
 
     if( $charter->approved_at )
     {
-      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has already been approved!');
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has already been approved!');
     }
 
     if( !$charter->approval_requested_at )
     {
-      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has not been submitted for approval!');
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has not been submitted for approval!');
     }
 
     $charter->update( array_except( Input::all(), '_method') );
@@ -328,13 +327,13 @@ class ChartersController extends Controller {
     {
       $user = $league->user;
       \Mail::send('emails.charter_rejected', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user ){
-        $message->to( $user->email, $user->name )->subject('Charter Could Not Be Approved');
+        $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Could Not Be Approved');
       });
     }
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'rejected', $charter ) );
 
-    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter has been rejected!');
+    return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has been rejected!');
   }
 
   /**
