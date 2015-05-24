@@ -33,7 +33,7 @@ class LogEventCommand extends Command implements SelfHandling {
   {
     $event = new Event;
     $event->operation = $this->operation;
-    $event->subject = get_class( $this->subject );
+    $event->subject_type = get_class( $this->subject );
     $event->subject_id = $this->subject->id;
     $event->user_id = $this->user->id;
     $event->save();
