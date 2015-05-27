@@ -18,7 +18,7 @@
       </form>
     @endif
 
-    @if( $user->id != Auth::user()->id && ( Auth::user()->hasRole('root') || ( ( Auth::user()->hasRole('staff') || Auth::user()->hasPermission('user-destroy') ) && !$user->hasRole('root') ) ) )
+    @if( $user->id != Auth::user()->id && ( Auth::user()->hasRole('root') || ( ( Auth::user()->hasRole('staff') || Auth::user()->can('user-destroy') ) && !$user->hasRole('root') ) ) )
       {!! Form::model( $user, ['method' => 'delete', 'route' => ['users.destroy', $user->id ] ] ) !!}
         {!! Form::submit("Delete user", ['class' => 'btn btn-danger', ''] ) !!}
       {!! Form::close() !!}
