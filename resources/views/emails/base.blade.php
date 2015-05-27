@@ -47,7 +47,7 @@
       <br />
       <p>Kind regards,<br /><br />The UKRDA Email Robot</p>
       <div class="footer">
-        <p>This message was sent to you automatically on behalf of the <a href="http://ukrda.org.uk/">United Kingdom Roller Derby Association</a> by <a href="http://muster.ukrda.org.uk/">Muster</a>.</p>
+        <p>This message was sent to you automatically on behalf of the <a href="http://ukrda.org.uk/">United Kingdom Roller Derby Association</a> by <a href="{{ env('APP_URL') }}">Muster</a>.</p>
       </div>
     </div>
   </body>
