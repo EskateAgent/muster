@@ -12,21 +12,38 @@ class AuthenticationTest extends TestCase {
     $this->assertRedirectedTo('auth/login');
   }
 
+  public function testUnauthenticatedLeagues()
+  {
+    $response = $this->call('GET', '/leagues');
+    $this->assertEquals( 302, $response->getStatusCode() );
+    $this->assertRedirectedTo('auth/login');
+  }
+
   public function testAuthenticatedHome()
   {
-    $user = new \App\User(['name' => 'test user']);
-
-    $this->be( $user );
+    $this->be( $this->users['league'] );
 
     $response = $this->call('GET', '/');
     $this->assertEquals( 302, $response->getStatusCode() );
     $this->assertRedirectedTo('home');
   }
 
-  public function testUnauthenticatedLeagues()
+  public function testRestrictedRoute()
   {
-    $response = $this->call('GET', '/leagues');
+    $response = $this->call('GET', '/events');
     $this->assertEquals( 302, $response->getStatusCode() );
     $this->assertRedirectedTo('auth/login');
+
+    $this->be( $this->users['league'] );
+    $response = $this->call('GET', '/events');
+    $this->assertEquals( 404, $response->getStatusCode() );
+
+    $this->be( $this->users['staff'] );
+    $response = $this->call('GET', '/events');
+    $this->assertEquals( 404, $response->getStatusCode() );
+
+    $this->be( $this->users['root'] );
+    $response = $this->call('GET', '/events');
+    $this->assertEquals( 200, $response->getStatusCode() );
   }
 }
