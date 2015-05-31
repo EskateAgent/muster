@@ -36,11 +36,11 @@ class AuthenticationTest extends TestCase {
 
     $this->be( $this->users['league'] );
     $response = $this->call('GET', '/events');
-    $this->assertEquals( 404, $response->getStatusCode() );
+    $this->assertEquals( 403, $response->getStatusCode() );
 
     $this->be( $this->users['staff'] );
     $response = $this->call('GET', '/events');
-    $this->assertEquals( 404, $response->getStatusCode() );
+    $this->assertEquals( 403, $response->getStatusCode() );
 
     $this->be( $this->users['root'] );
     $response = $this->call('GET', '/events');

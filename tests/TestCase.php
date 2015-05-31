@@ -30,19 +30,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
   {
     parent::setUp();
 
-    $root = new User(['name' => 'test root user', 'email' => 'root@test.test']);
-    $root->roles[] = Role::find(1);
-
-    $staff = new User(['name' => 'test staff user', 'email' => 'staff@test.test']);
-    $staff->roles[] = Role::find(2);
-
-    $league = new User(['name' => 'test league user', 'email' => 'league@test.test']);
-    $league->roles[] = Role::find(3);
-
     $this->users = array(
-                         'root'   => $root,
-                         'staff'  => $staff,
-                         'league' => $league,
-                         );
+                          'root'   => new User(['name' => 'test root user', 'email' => 'root@test.test']),
+                          'staff'  => new User(['name' => 'test staff user', 'email' => 'staff@test.test']),
+                          'league' => new User(['name' => 'test league user', 'email' => 'league@test.test']),
+                        );
+
+    $this->users['root']->roles[] = Role::find(1);
+    $this->users['staff']->roles[] = Role::find(2);
+    $this->users['league']->roles[] = Role::find(3);
   }
 }
