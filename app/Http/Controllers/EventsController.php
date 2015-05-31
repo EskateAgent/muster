@@ -15,11 +15,6 @@ class EventsController extends Controller {
    */
   public function index()
   {
-    if( !\Auth::user()->can('event-show') )
-    {
-      abort(404);
-    }
-
     $events = Event::all()->sortByDesc('created_at')->take(100);
     return view('events.index', compact('events') );
   }
