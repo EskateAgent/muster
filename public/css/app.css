@@ -6245,3 +6245,23 @@ label,
   background-color: #e8f4ff;
   border-bottom: none;
 }
+aside {
+  padding: 25px 30px 15px;
+  background: #eee;
+  border-radius: 10px;
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+}
+  .icon {
+    padding: 20px;
+    border-radius: 20px;
+    width: 16px;
+    height: 16px;
+    background: #d00;
+    display: block;
+    position: absolute;
+    top: -18px;
+    left: -18px;
+  }
+  .icon.info { background: #fff url(/images/icons/information.png) no-repeat center center; }
