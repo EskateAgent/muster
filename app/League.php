@@ -74,7 +74,7 @@ class League extends Model {
 
     $users = array( 0 => '- none -');
 
-    $query = DB::table('users')->whereNotIn('id', $user_ids );
+    $query = DB::table('users')->leftJoin('role_user', 'role_user.user_id', '=', 'users.id' )->whereNotIn('users.id', $user_ids )->where('role_user.role_id', '=', 3 );
     if( !is_null( $this->user_id ) )
     {
       $query->orWhere('id', '=', $this->user_id );
