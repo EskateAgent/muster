@@ -24,17 +24,23 @@ Steps are as follows:
 6. run `php artisan migrate` from the command line (*protip*: make the artisan file executable and you can just run `./artisan migrate` instead!)
 7. run `php artisan db:seed` from the command line (or `./artisan db:seed` if you did the *protip* above)
 8. manually inject a user record into the database. In MariaDB/MySQL this looks like:
-   ```
+
+   ```sql
    INSERT INTO `users` (`id`, `name`, `email`, `password`, `created_at`, `updated_at`) VALUES (1, 'root', 'root@localhost.com', '$2y$10$BK7HykL2gNqMW9aWDZ9qr.c.dca6XQmpNLbyBA7nb5QUz3xWd7xHW', NOW(), NOW() );
    ```
+
 9. manually marry the injected user with the `root` permission role. Again, in MariaDB/MySQL this looks like:
-   ```
+
+   ```sql
    INSERT INTO `role_user` (`user_id`, `role_id`) VALUES (1, 1);
    ```
+
 10. fire up your browser and direct it to your new Muster instance
 11. log in with the credentials:
+
     ```
     email address: root@localhost
     password: d6c75196
     ```
+
 12. **immediately** change your password for this user account, or create a new root account and delete the temporary one
