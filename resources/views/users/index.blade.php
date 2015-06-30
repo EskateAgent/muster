@@ -15,7 +15,12 @@
   @else
     <ul>
       @foreach( $users as $user )
-        <li><a href="{{ route('users.show', $user->id ) }}">{{ $user->name }}</a></li>
+        <li>
+          <a href="{{ route('users.show', $user->id ) }}">{{ $user->name }}</a>
+          @if( $user->league )
+          - <a href="{{ route('leagues.show', $user->league_id ) }}">{{ $user->league->name }}</a>
+          @endif
+        </li>
       @endforeach
     </ul>
   @endif
