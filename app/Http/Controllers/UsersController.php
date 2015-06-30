@@ -161,7 +161,7 @@ class UsersController extends Controller {
 
     if( $role = $request->input('role') )
     {
-      if( $role > Auth::user()->role()->id )
+      if( $role < Auth::user()->role()->id )
       {
         abort(404);
       }
