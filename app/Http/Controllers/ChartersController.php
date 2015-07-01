@@ -6,6 +6,7 @@ use App\CharterType;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Auth;
+use Exception;
 use Input;
 use Redirect;
 
