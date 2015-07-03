@@ -352,20 +352,9 @@ class ChartersController extends Controller {
       $headers = array();
       $name_index = $number_index = null;
 
-      $first_line = $file->fgets();
-
-      preg_match('/(["\'])([,;])["\']/', $first_line, $matches );
-
-      if( count( $matches ) !== 3 )
-      {
-        throw new Exception('Invalid file!');
-      }
-
-      list( , $enclosure, $delimiter ) = $matches;
-
       $file->rewind();
       $i = 0;
-      while( $row = $file->fgetcsv( $delimiter, $enclosure ) )
+      while( $row = $file->fgetcsv() )
       {
         $i++;
 
