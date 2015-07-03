@@ -3,6 +3,8 @@
   {!! Form::label('charter_type_id', 'Type:') !!}
   {!! Form::select('charter_type_id', $charter->types(), $charter_type_id, array('class' => 'form-control') ) !!}
 </div>
+@else
+{!! Form::hidden('charter_type_id', $charter_type_id ) !!}
 @endif
 
 <div class="form-group">
