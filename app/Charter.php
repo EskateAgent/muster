@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Exception;
 
 class Charter extends Model {
 
@@ -33,6 +34,11 @@ class Charter extends Model {
 
   public function replaceSkaters( array $skaters )
   {
+    if( !count( $skaters ) )
+    {
+      throw new Exception('No skaters found!');
+    }
+
     if( count( $this->skaters ) )
     {
       foreach( $this->skaters as $skater )
@@ -41,12 +47,9 @@ class Charter extends Model {
       }
     }
 
-    if( count( $skaters ) )
+    foreach( $skaters as $skater )
     {
-      foreach( $skaters as $skater )
-      {
-        Skater::create( array_merge( $skater, array('charter_id' => $this->id ) ) );
-      }
+      Skater::create( array_merge( $skater, array('charter_id' => $this->id ) ) );
     }
   }
 

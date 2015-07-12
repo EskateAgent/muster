@@ -75,7 +75,14 @@ class ChartersController extends Controller {
 
     $charter = Charter::create( array_merge( Input::all(), array('league_id' => $league->id, 'name' => \Carbon\Carbon::now()->toDateString() ) ) );
 
-    $charter->replaceSkaters( $this->processFile( $request ) );
+    try
+    {
+      $charter->replaceSkaters( $this->processFile( $request ) );
+    }
+    catch( Exception $e )
+    {
+      return Redirect::route('leagues.show', [ $league->slug ] )->with('error', $e->getMessage() );
+    }
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'stored', $charter ) );
 
@@ -349,7 +356,6 @@ class ChartersController extends Controller {
     if( $request->hasFile('csv') && $request->file('csv')->isValid() )
     {
       $file = $request->file('csv')->openFile();
-      $headers = array();
       $name_index = $number_index = null;
 
       $file->rewind();
@@ -365,16 +371,15 @@ class ChartersController extends Controller {
 
         if( ( $i > 50 ) || ( count( $skaters ) > 20 ) )
         {
-          throw new Exception('Invalid file!');
+          throw new Exception('Looks like something went funny with your file. Please download a new copy of the template and try again.');
         }
 
-        if( !$headers )
+        if( !isset( $name_index, $number_index ) )
         {
           if( ( array_search('uniform_nbr', $row ) !== false ) && ( array_search('derby_name', $row ) !== false ) )
           {
-            $headers = $row;
-            $name_index = array_search('derby_name', $headers );
-            $number_index = array_search('uniform_nbr', $headers );
+            $name_index = array_search('derby_name', $row );
+            $number_index = array_search('uniform_nbr', $row );
           }
           continue;
         }
