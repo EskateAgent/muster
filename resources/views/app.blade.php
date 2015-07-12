@@ -63,11 +63,14 @@
         </div>
       @endif
 
-      @if( $errors->any() )
+      @if( $errors->any() || Session::has('error') )
         <div class='flash alert-danger'>
           @foreach( $errors->all() as $error )
             <p>{{ $error }}</p>
           @endforeach
+          @if( Session::has('error') )
+            <p>{{ Session::get('error') }}</p>
+          @endif
         </div>
       @endif
 
