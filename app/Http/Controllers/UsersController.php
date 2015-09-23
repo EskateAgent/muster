@@ -178,4 +178,28 @@ class UsersController extends Controller {
 
     return Redirect::route('users.show', $user->id )->with('message', 'User has been updated');
   }
+
+  /**
+   * Soft delete the specified resource from storage.
+   *
+   * @param  User $user
+   * @return Response
+   */
+  public function destroy( User $user )
+  {
+    if( !$user->id || $user->deleted_at )
+    {
+      abort(404);
+    }
+
+    if( ( Auth::user()->hasRole('staff') && $user->hasRole('root') ) || Auth::user()->hasRole('league') )
+    {
+      abort(404);
+    }
+
+    $user->delete();
+    $this->dispatch( new LogEventCommand( Auth::user(), 'deleted', $user ) );
+
+    return Redirect::route('users.index')->with('message', 'User ' . $user->name . ' has been deleted');
+  }
 }
