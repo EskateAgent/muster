@@ -76,9 +76,11 @@
 
       @yield('content')
     </div>
+    @if( !Auth::guest() )
     <footer>
       <p style="text-align: right; padding: 10px 30px;"><a href="http://ukrda.org.uk/" target="_blank">United Kingdom Roller Derby Association</a></p>
     </footer>
+    @endif
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.1/js/bootstrap.min.js"></script>
   </body>
