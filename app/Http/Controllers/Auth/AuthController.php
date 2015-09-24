@@ -10,6 +10,7 @@ use Auth;
 use Input;
 use Redirect;
 use App\Commands\LogEventCommand;
+use Validator;
 
 class AuthController extends Controller {
 
@@ -29,15 +30,10 @@ class AuthController extends Controller {
   /**
    * Create a new authentication controller instance.
    *
-   * @param  \Illuminate\Contracts\Auth\Guard  $auth
-   * @param  \Illuminate\Contracts\Auth\Registrar  $registrar
    * @return void
    */
-  public function __construct(Guard $auth, Registrar $registrar)
+  public function __construct()
   {
-    $this->auth = $auth;
-    $this->registrar = $registrar;
-
     $this->middleware('guest', ['except' => ['getLogout', 'getPasswordChange', 'postPasswordChange', 'postPasswordReset'] ] );
   }
 
@@ -51,12 +47,11 @@ class AuthController extends Controller {
   public function postLogin(Request $request)
   {
     $this->validate( $request, ['email' => 'required|email', 'password' => 'required'] );
-
     $credentials = $request->only('email', 'password');
 
-    if( $this->auth->attempt( $credentials, $request->has('remember') ) )
+    if( Auth::attempt( $credentials, $request->has('remember') ) )
     {
-      $user = $this->auth->user();
+      $user = Auth::user();
       if( is_null( $user->last_login ) )
       {
         return redirect('auth/password-change');
@@ -126,5 +121,35 @@ class AuthController extends Controller {
     });
 
     return Redirect::route('users.show', $user->id )->with('message', "User's password has been reset and emailed to them.");
+  }
+
+  /**
+   * Get a validator for an incoming registration request.
+   *
+   * @param  array  $data
+   * @return \Illuminate\Contracts\Validation\Validator
+   */
+  public function validator(array $data)
+  {
+    return Validator::make($data, [
+      'name' => 'required|max:255',
+      'email' => 'required|email|max:255|unique:users',
+      'password' => 'required|confirmed|min:6',
+    ]);
+  }
+
+  /**
+   * Create a new user instance after a valid registration.
+   *
+   * @param  array  $data
+   * @return User
+   */
+  public function create(array $data)
+  {
+    return User::create([
+      'name' => $data['name'],
+      'email' => $data['email'],
+      'password' => bcrypt($data['password']),
+    ]);
   }
 }
