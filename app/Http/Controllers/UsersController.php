@@ -197,6 +197,13 @@ class UsersController extends Controller {
       abort(404);
     }
 
+    if( !is_null( $user->league_id ) )
+    {
+      $league = $user->league;
+      $league->user_id = null;
+      $league->save();
+    }
+
     $user->delete();
     $this->dispatch( new LogEventCommand( Auth::user(), 'deleted', $user ) );
 

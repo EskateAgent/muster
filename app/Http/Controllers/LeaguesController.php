@@ -149,6 +149,12 @@ class LeaguesController extends Controller {
       abort(404);
     }
 
+    if( !is_null( $league->user_id ) )
+    {
+      $league->user_id = null;
+      $league->save();
+    }
+
     $league->delete();
     $this->dispatch( new LogEventCommand( Auth::user(), 'deleted', $league ) );
 
