@@ -110,7 +110,7 @@ class ChartersController extends Controller {
       abort(404);
     }
 
-    if( $charter->isDeleted() && !Auth::user()->can('charter-destroy') )
+    if( $charter->isDeleted() && !Auth::user()->can('charter-delete') )
     {
       abort(404);
     }

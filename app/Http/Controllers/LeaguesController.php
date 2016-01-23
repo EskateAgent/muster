@@ -70,7 +70,7 @@ class LeaguesController extends Controller {
   {
     $league = League::withTrashed()->where('slug', $slug )->first();
 
-    if( !$league->id || ( $league->isDeleted() && !Auth::user()->can('league-destroy') ) )
+    if( !$league->id || ( $league->isDeleted() && !Auth::user()->can('league-delete') ) )
     {
       abort(404);
     }
@@ -152,7 +152,7 @@ class LeaguesController extends Controller {
   {
     $league = League::where('slug', $slug )->first();
 
-    if( !$league->id || !Auth::user()->can('league-destroy') || $league->isDeleted() )
+    if( !$league->id || !Auth::user()->can('league-delete') || $league->isDeleted() )
     {
       abort(404);
     }

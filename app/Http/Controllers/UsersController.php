@@ -99,7 +99,7 @@ class UsersController extends Controller {
   {
     $user = User::withTrashed()->where('id', $id )->first();
 
-    if( !$user->id || ( $user->isDeleted() && !Auth::user()->can('user-destroy') ) )
+    if( !$user->id || ( $user->isDeleted() && !Auth::user()->can('user-delete') ) )
     {
       abort(404);
     }

@@ -15,15 +15,15 @@ class PermissionsRolesTableSeeder extends Seeder {
       ['role_id' => 1, 'permission_id' => 2 ],  // user-show
       ['role_id' => 1, 'permission_id' => 3 ],  // user-create
       ['role_id' => 1, 'permission_id' => 4 ],  // user-edit
-      ['role_id' => 1, 'permission_id' => 5 ],  // user-destroy
+      ['role_id' => 1, 'permission_id' => 5 ],  // user-delete
       ['role_id' => 1, 'permission_id' => 6 ],  // league-show
       ['role_id' => 1, 'permission_id' => 7 ],  // league-create
       ['role_id' => 1, 'permission_id' => 8 ],  // league-edit
-      ['role_id' => 1, 'permission_id' => 9 ],  // league-destroy
+      ['role_id' => 1, 'permission_id' => 9 ],  // league-delete
       ['role_id' => 1, 'permission_id' => 10 ], // charter-show
       ['role_id' => 1, 'permission_id' => 11 ], // charter-create
       ['role_id' => 1, 'permission_id' => 12 ], // charter-edit
-      ['role_id' => 1, 'permission_id' => 13 ], // charter-destroy
+      ['role_id' => 1, 'permission_id' => 13 ], // charter-delete
       ['role_id' => 1, 'permission_id' => 14 ], // charter-request_approval
       ['role_id' => 1, 'permission_id' => 15 ], // charter-approve
       ['role_id' => 1, 'permission_id' => 16 ], // charter-reject

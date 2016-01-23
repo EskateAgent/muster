@@ -18,7 +18,7 @@
     @if( Auth::user()->can('charter-edit') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
       <a class="btn btn-default" href="{{ route('leagues.charters.edit', [ $league->slug, $charter->slug ] ) }}">Upload a new revision</a>
     @endif
-    @if( Auth::user()->can('charter-destroy') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
+    @if( Auth::user()->can('charter-delete') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
       {!! Form::model( $charter, ['method' => 'delete', 'route' => ['leagues.charters.delete', $league->slug, $charter->slug ], 'style' => 'display: inline-block;' ] ) !!}
         {!! Form::submit("Delete this draft", ['class' => 'btn btn-danger'] ) !!}
       {!! Form::close() !!}
