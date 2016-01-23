@@ -1,10 +1,10 @@
 @extends('app')
 
 @section('content')
-  <div class="page-header">
+  <div class="page-header {{ $league->isDeleted() ? 'deleted' : '' }}">
     <h1>
       {{ $league->name }}
-      @if( Auth::user()->can('league-edit') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
+      @if( !$league->isDeleted() && Auth::user()->can('league-edit') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
         <small><a href="{{ route('leagues.edit', [ $league->slug ] ) }}">edit</a></small>
       @endif
     </h1>

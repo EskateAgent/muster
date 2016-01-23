@@ -91,7 +91,12 @@ class ChartersController extends Controller {
    */
   public function show( $league, $charter )
   {
-    $league = League::where('slug', $league )->first();
+    $league = League::withTrashed()->where('slug', $league )->first();
+
+    if( $league->isDeleted() )
+    {
+      return Redirect::route('leagues.show', $league->slug )->with('message', 'League has been deleted, charters can no longer be viewed!');
+    }
 
     if( !$league->id )
     {

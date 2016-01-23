@@ -1,10 +1,10 @@
 @extends('app')
 
 @section('content')
-  <div class="page-header">
+  <div class="page-header {{ $user->isDeleted() ? 'deleted' : '' }}">
     <h1>
       {{ $user->name }}
-      @if( Auth::user()->can('user-edit') && ( ( Auth::user()->id == $user->id ) || Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
+      @if( !$user->isDeleted() && Auth::user()->can('user-edit') && ( ( Auth::user()->id == $user->id ) || Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
         <small><a href="{{ route('users.edit', [ $user->id ] ) }}">edit</a></small>
       @endif
     </h1>
@@ -24,7 +24,9 @@
       {!! Form::close() !!}
     @endif
   </div>
-  <p>{{ $user->role()->display_name }}</p>
+  @if( $user->role() )
+    <p>{{ $user->role()->display_name }}</p>
+  @endif
   <p><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></p>
   @if( $user->league )
     <h2>League</h2>

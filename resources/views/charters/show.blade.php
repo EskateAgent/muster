@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('content')
-  <div class="page-header">
+  <div class="page-header {{ $charter->isDeleted() ? 'deleted' : '' }}">
     <h1><a href="{{ route('leagues.show', [ $league->slug ] ) }}">{{ $league->name }}</a> - {{ $charter->name }} <small>({{ $charter->charter_type->name }})</small></h1>
   </div>
 

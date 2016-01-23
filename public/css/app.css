@@ -1200,6 +1200,13 @@ a.bg-danger:hover {
   margin: 30px 0 20px;
   border-bottom: 1px solid #eeeeee;
 }
+.page-header.deleted h1 {
+  color: #ccc;
+}
+.page-header.deleted h1:after {
+  content: " (deleted)";
+  color: #ccc;
+}
 ul,
 ol {
   margin-top: 0;
