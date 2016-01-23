@@ -30,7 +30,7 @@
                 switch( get_class( $subject ) )
                 {
                   case 'App\Charter':
-                    $route = route('leagues.charters.show', [ $subject->league->slug, $subject->slug ] );
+                    $route = route('leagues.charters.show', [ $subject->getLeague()->slug, $subject->slug ] );
                     break;
 
                   case 'App\League':

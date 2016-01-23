@@ -17,6 +17,11 @@ class Charter extends Model {
     return $this->belongsTo('App\League');
   }
 
+  public function getLeague()
+  {
+    return League::withTrashed()->where('id', $this->league_id )->first();
+  }
+
   public function events()
   {
     return $this->morphMany('App\Event', 'subject');
