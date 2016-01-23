@@ -18,7 +18,7 @@ Steps are as follows:
 
 1. install and configure a hosting environment suitable for Laravel 5. The [Laravel 5 documentation](http://laravel.com/docs/5.0/installation) has all the information you need to get going
 2. clone the [canonical repo](https://github.com/ukrda/muster) into a folder of your choosing
-3. jump into the root directory of the project and run `composer update`
+3. jump into the root directory of the project and run `composer install`
 4. copy the `.env.example` file to `.env` in the same directory, and edit to taste
 5. make sure that the `storage` directory (and any of it's contents) are writable by the user your httpd process runs under (eg. www-data in Ubuntu, http in Arch Linux, etc)
 6. run `php artisan migrate` from the command line (*protip*: make the artisan file executable and you can just run `./artisan migrate` instead!)
