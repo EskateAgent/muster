@@ -94,4 +94,9 @@ class League extends Model {
   {
     return env('APP_URL') . '/leagues/' . $this->slug;
   }
+
+  public function isDeleted()
+  {
+    return !is_null( $this->deleted_at );
+  }
 }

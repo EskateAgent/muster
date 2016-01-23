@@ -77,6 +77,7 @@
       @yield('content')
     </div>
     @if( !Auth::guest() )
+    <br />
     <footer>
       <p style="text-align: right; padding: 10px 30px;"><a href="http://ukrda.org.uk/" target="_blank">United Kingdom Roller Derby Association</a></p>
     </footer>

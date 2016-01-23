@@ -82,4 +82,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
   {
     return env('APP_URL') . '/users/' . $this->id;
   }
+
+  public function isDeleted()
+  {
+    return !is_null( $this->deleted_at );
+  }
 }

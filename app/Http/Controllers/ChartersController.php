@@ -21,25 +21,16 @@ class ChartersController extends Controller {
   ];
 
   /**
-   * Display a listing of the resource.
-   *
-   * @param  League $league
-   * @return Response
-   */
-  public function index( League $league )
-  {
-    return view('charters.index', compact('league') );
-  }
-
-  /**
    * Show the form for creating a new resource.
    *
    * @param  League $league
    * @param  Request $request
    * @return Response
    */
-  public function create( League $league )
+  public function create( $league )
   {
+    $league = League::where('slug', $league )->first();
+
     if( !$league->id )
     {
       abort(404);
@@ -59,8 +50,10 @@ class ChartersController extends Controller {
    * @param  League $league
    * @return Response
    */
-  public function store( League $league, Request $request )
+  public function store( $league, Request $request )
   {
+    $league = League::where('slug', $league )->first();
+
     if( !$league->id )
     {
       abort(404);
@@ -73,7 +66,7 @@ class ChartersController extends Controller {
 
     $this->validate( $request, $this->rules );
 
-    $charter = Charter::create( array_merge( Input::all(), array('league_id' => $league->id, 'name' => \Carbon\Carbon::now()->toDateString() ) ) );
+    $charter = Charter::create( array_merge( Input::all(), ['league_id' => $league->id, 'name' => \Carbon\Carbon::now()->toDateString() ] ) );
 
     try
     {
@@ -96,19 +89,23 @@ class ChartersController extends Controller {
    * @param  Charter $charter
    * @return Response
    */
-  public function show( League $league, Charter $charter )
+  public function show( $league, $charter )
   {
+    $league = League::where('slug', $league )->first();
+
     if( !$league->id )
     {
       abort(404);
     }
 
-    if( $charter->league != $league )
-    {
-      return Redirect::route('leagues.show', $league->slug )->with('message', 'Charter not found!');
-    }
+    $charter = Charter::withTrashed()->where('slug', $charter )->where('league_id', $league->id )->first();
 
     if( !( ( $league->currentCharter() && ( $league->currentCharter()->id == $charter->id ) ) || ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('staff') || Auth::user()->hasRole('root') ) )
+    {
+      abort(404);
+    }
+
+    if( $charter->isDeleted() && !Auth::user()->can('charter-destroy') )
     {
       abort(404);
     }
@@ -123,8 +120,10 @@ class ChartersController extends Controller {
    * @param  Charter $charter
    * @return Response
    */
-  public function edit( League $league, Charter $charter )
+  public function edit( $league, $charter )
   {
+    $league = League::where('slug', $league )->first();
+
     if( !$league->id )
     {
       abort(404);
@@ -134,6 +133,8 @@ class ChartersController extends Controller {
     {
       abort(404);
     }
+
+    $charter = Charter::where('slug', $charter )->where('league_id', $league->id )->first();
 
     return view('charters.edit', compact('league', 'charter') );
   }
@@ -146,8 +147,10 @@ class ChartersController extends Controller {
    * @param  Request $request
    * @return Response
    */
-  public function update( League $league, Charter $charter, Request $request )
+  public function update( $league, $charter, Request $request )
   {
+    $league = League::where('slug', $league )->first();
+
     if( !$league->id )
     {
       abort(404);
@@ -157,6 +160,8 @@ class ChartersController extends Controller {
     {
       abort(404);
     }
+
+    $charter = Charter::where('slug', $charter )->where('league_id', $league->id )->first();
 
     $this->validate( $request, $this->rules );
 
@@ -182,8 +187,10 @@ class ChartersController extends Controller {
    * @param  Charter $charter
    * @return Response
    */
-  public function destroy( League $league, Charter $charter )
+  public function delete( $league, $charter )
   {
+    $league = League::where('slug', $league )->first();
+
     if( !$league->id )
     {
       abort(404);
@@ -194,7 +201,9 @@ class ChartersController extends Controller {
       abort(404);
     }
 
-    if( ( $charter->deleted_at || $charter->approval_requested_at ) && !Auth::user()->hasRole('root') )
+    $charter = Charter::where('slug', $charter )->where('league_id', $league->id )->first();
+
+    if( ( $charter->isDeleted() || $charter->approval_requested_at ) && !Auth::user()->hasRole('root') )
     {
       abort(404);
     }

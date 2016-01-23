@@ -95,9 +95,11 @@ class UsersController extends Controller {
    * @param  User $user
    * @return Response
    */
-  public function show( User $user )
+  public function show( $id )
   {
-    if( !$user->id )
+    $user = User::withTrashed()->where('id', $id )->first();
+
+    if( !$user->id || ( $user->isDeleted() && !Auth::user()->can('user-destroy') ) )
     {
       abort(404);
     }
@@ -111,8 +113,10 @@ class UsersController extends Controller {
    * @param  User $user
    * @return Response
    */
-  public function edit( User $user )
+  public function edit( $id )
   {
+    $user = User::where('id', $id )->first();
+
     if( !$user->id )
     {
       abort(404);
@@ -135,8 +139,10 @@ class UsersController extends Controller {
    * @param  Request $request
    * @return Response
    */
-  public function update( User $user, Request $request )
+  public function update( $id, Request $request )
   {
+    $user = User::where('id', $id )->first();
+
     if( !$user->id )
     {
       abort(404);
@@ -185,8 +191,10 @@ class UsersController extends Controller {
    * @param  User $user
    * @return Response
    */
-  public function destroy( User $user )
+  public function delete( $id )
   {
+    $user = User::where('id', $id )->first();
+
     if( !$user->id || $user->deleted_at )
     {
       abort(404);

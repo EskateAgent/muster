@@ -67,4 +67,9 @@ class Charter extends Model {
     }
     return $charter_types;
   }
+
+  public function isDeleted()
+  {
+    return !is_null( $this->deleted_at );
+  }
 }

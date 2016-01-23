@@ -9,7 +9,7 @@
     <p>Charter submission was rejected: {{ $reason }}</p>
   @endif
 
-  @if( !$charter->active_from && !$charter->approval_requested_at && !$charter->deleted_at )
+  @if( !$charter->active_from && !$charter->approval_requested_at && !$charter->isDeleted() )
     @if( Auth::user()->can('charter-request_approval') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
       {!! Form::model( $charter, ['method' => 'patch', 'route' => ['leagues.charters.request_approval', $league->slug, $charter->slug ], 'style' => 'display: inline-block;' ] ) !!}
         {!! Form::submit("Submit for approval", ['class' => 'btn btn-success'] ) !!}
@@ -19,8 +19,13 @@
       <a class="btn btn-default" href="{{ route('leagues.charters.edit', [ $league->slug, $charter->slug ] ) }}">Upload a new revision</a>
     @endif
     @if( Auth::user()->can('charter-destroy') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
-      {!! Form::model( $charter, ['method' => 'delete', 'route' => ['leagues.charters.destroy', $league->slug, $charter->slug ], 'style' => 'display: inline-block;' ] ) !!}
+      {!! Form::model( $charter, ['method' => 'delete', 'route' => ['leagues.charters.delete', $league->slug, $charter->slug ], 'style' => 'display: inline-block;' ] ) !!}
         {!! Form::submit("Delete this draft", ['class' => 'btn btn-danger'] ) !!}
+      {!! Form::close() !!}
+    @endif
+    @if( $charter->isDeleted() && ( Auth::user()->can('charter-create') || ( Auth::user()->hasRole('root') ) ) )
+      {!! Form::model( $charter, ['method' => 'patch', 'route' => ['leagues.charters.restore', $league->slug, $charter->slug ], 'style' => 'display: inline-block;' ] ) !!}
+        {!! Form::submit("Restore this draft", ['class' => 'btn btn-success'] ) !!}
       {!! Form::close() !!}
     @endif
   @endif

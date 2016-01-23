@@ -66,9 +66,11 @@ class LeaguesController extends Controller {
    * @param  League $league
    * @return Response
    */
-  public function show( League $league )
+  public function show( $slug )
   {
-    if( !$league->id )
+    $league = League::withTrashed()->where('slug', $slug )->first();
+
+    if( !$league->id || ( $league->isDeleted() && !Auth::user()->can('league-destroy') ) )
     {
       abort(404);
     }
@@ -83,8 +85,10 @@ class LeaguesController extends Controller {
    * @param  League $league
    * @return Response
    */
-  public function edit( League $league )
+  public function edit( $slug )
   {
+    $league = League::where('slug', $slug )->first();
+
     if( !$league->id )
     {
       abort(404);
@@ -107,8 +111,10 @@ class LeaguesController extends Controller {
    * @param  Request $request
    * @return Response
    */
-  public function update( League $league, Request $request )
+  public function update( $slug, Request $request )
   {
+    $league = League::where('slug', $slug )->first();
+
     if( !$league->id )
     {
       abort(404);
@@ -142,9 +148,11 @@ class LeaguesController extends Controller {
    * @param  League $league
    * @return Response
    */
-  public function destroy( League $league )
+  public function delete( $slug )
   {
-    if( !$league->id || !Auth::user()->can('league-destroy') || $league->deleted_at )
+    $league = League::where('slug', $slug )->first();
+
+    if( !$league->id || !Auth::user()->can('league-destroy') || $league->isDeleted() )
     {
       abort(404);
     }
@@ -171,7 +179,7 @@ class LeaguesController extends Controller {
   {
     $league = League::onlyTrashed()->whereSlug( $slug )->first();
 
-    if( !$league->id || !Auth::user()->can('league-create') || !$league->deleted_at )
+    if( !$league->id || !Auth::user()->can('league-create') || !$league->isDeleted() )
     {
       abort(404);
     }
