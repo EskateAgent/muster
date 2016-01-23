@@ -28,6 +28,22 @@ class LeaguesController extends Controller {
   }
 
   /**
+   * Display a listing of archived (deleted) resources.
+   *
+   * @return Response
+   */
+  public function archived()
+  {
+    if( !Auth::user()->can('league-archived') )
+    {
+      abort(404);
+    }
+
+    $leagues = League::onlyTrashed()->get();
+    return view('leagues.archived', compact('leagues') );
+  }
+
+  /**
    * Show the form for creating a new resource.
    *
    * @return Response

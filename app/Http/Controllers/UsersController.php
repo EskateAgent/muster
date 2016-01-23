@@ -28,6 +28,22 @@ class UsersController extends Controller {
   }
 
   /**
+   * Display a listing of archived (deleted) resources.
+   *
+   * @return Response
+   */
+  public function archived()
+  {
+    if( !Auth::user()->can('user-archived') )
+    {
+      abort(404);
+    }
+
+    $users = User::onlyTrashed()->get();
+    return view('users.archived', compact('users') );
+  }
+
+  /**
    * Show the form for creating a new resource.
    *
    * @return Response

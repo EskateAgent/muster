@@ -7,6 +7,12 @@
       @if( Auth::user()->can('user-create') )
         <small><a href="{{ route('users.create') }}">create new</a></small>
       @endif
+      @if( Auth::user()->can('user-archived') )
+        @if( Auth::user()->can('user-create') )
+        <small>&bullet;</small>
+        @endif
+        <small><a href="{{ route('users.archived') }}">archived</a></small>
+      @endif
     </h1>
   </div>
 

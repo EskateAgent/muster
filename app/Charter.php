@@ -14,11 +14,6 @@ class Charter extends Model {
 
   public function league()
   {
-    return $this->belongsTo('App\League');
-  }
-
-  public function getLeague()
-  {
     return League::withTrashed()->where('id', $this->league_id )->first();
   }
 

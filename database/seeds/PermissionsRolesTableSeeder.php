@@ -9,7 +9,7 @@ class PermissionsRolesTableSeeder extends Seeder {
     // Uncomment the below to wipe the table clean before populating
     DB::table('permission_role')->delete();
 
-    $permissions = array(
+    $permissions = [
       // root user
       ['role_id' => 1, 'permission_id' => 1 ],  // home
       ['role_id' => 1, 'permission_id' => 2 ],  // user-show
@@ -28,6 +28,9 @@ class PermissionsRolesTableSeeder extends Seeder {
       ['role_id' => 1, 'permission_id' => 15 ], // charter-approve
       ['role_id' => 1, 'permission_id' => 16 ], // charter-reject
       ['role_id' => 1, 'permission_id' => 17 ], // event-show
+      ['role_id' => 1, 'permission_id' => 18 ], // user-archived
+      ['role_id' => 1, 'permission_id' => 19 ], // league-archived
+      ['role_id' => 1, 'permission_id' => 20 ], // charter-archived
 
       // staff
       ['role_id' => 2, 'permission_id' => 1 ],  // home
@@ -41,6 +44,9 @@ class PermissionsRolesTableSeeder extends Seeder {
       ['role_id' => 2, 'permission_id' => 15 ], // charter-approve
       ['role_id' => 2, 'permission_id' => 16 ], // charter-reject
       ['role_id' => 2, 'permission_id' => 17 ], // event-show
+      ['role_id' => 2, 'permission_id' => 18 ], // user-archived
+      ['role_id' => 2, 'permission_id' => 19 ], // league-archived
+      ['role_id' => 2, 'permission_id' => 20 ], // charter-archived
 
       // league
       ['role_id' => 3, 'permission_id' => 1 ],  // home
@@ -52,7 +58,7 @@ class PermissionsRolesTableSeeder extends Seeder {
       ['role_id' => 3, 'permission_id' => 11 ], // charter-create
       ['role_id' => 3, 'permission_id' => 12 ], // charter-edit
       ['role_id' => 3, 'permission_id' => 14 ], // charter-request_approval
-    );
+    ];
 
     // Uncomment the below to run the seeder
     DB::table('permission_role')->insert( $permissions );

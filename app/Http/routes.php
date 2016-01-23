@@ -16,6 +16,7 @@ Route::get('home', 'HomeController@index');
 Route::post('users', ['as' => 'users.store', 'uses' => 'UsersController@store']);
 Route::get('users', ['as' => 'users.index', 'uses' => 'UsersController@index']);
 Route::get('users/create', ['as' => 'users.create', 'uses' => 'UsersController@create']);
+Route::get('users/archived', ['as' => 'users.archived', 'uses' => 'UsersController@archived']);
 Route::delete('users/{user}', ['as' => 'users.delete', 'uses' => 'UsersController@delete']);
 Route::get('users/{user}', ['as' => 'users.show', 'uses' => 'UsersController@show']);
 Route::put('users/{user}', ['as' => 'users.update', 'uses' => 'UsersController@update']);
@@ -25,6 +26,7 @@ Route::get('users/{user}/edit', ['as' => 'users.edit', 'uses' => 'UsersControlle
 Route::post('leagues', ['as' => 'leagues.store', 'uses' => 'LeaguesController@store']);
 Route::get('leagues', ['as' => 'leagues.index', 'uses' => 'LeaguesController@index']);
 Route::get('leagues/create', ['as' => 'leagues.create', 'uses' => 'LeaguesController@create']);
+Route::get('leagues/archived', ['as' => 'leagues.archived', 'uses' => 'LeaguesController@archived']);
 Route::delete('leagues/{league}', ['as' => 'leagues.delete', 'uses' => 'LeaguesController@delete']);
 Route::get('leagues/{league}', ['as' => 'leagues.show', 'uses' => 'LeaguesController@show']);
 Route::put('leagues/{league}', ['as' => 'leagues.update', 'uses' => 'LeaguesController@update']);
