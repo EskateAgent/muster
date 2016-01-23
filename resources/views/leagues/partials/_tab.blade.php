@@ -21,7 +21,7 @@
           @if( ( $league->historicalCharters( $type->id )->count() ) )
             <h4>Previous</h4>
             <ul>
-              @foreach( $league->historicalCharters() as $charter )
+              @foreach( $league->historicalCharters( $type->id ) as $charter )
                 <li><a href="{{ route('leagues.charters.show', [ $league->slug, $charter->slug ] ) }}">{{ $charter->name }}</a></li>
               @endforeach
             </ul>
