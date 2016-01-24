@@ -52,6 +52,17 @@ Route::controllers([
   'password' => 'Auth\PasswordController',
 ]);
 
+Route::get('clear-cache', function(){
+  $instructions = ['auth:clear-resets', 'cache:clear', 'config:clear', 'clear-compiled', 'view:clear', 'config:cache', 'optimize'];
+  $results = [];
+  foreach( $instructions as $instruction )
+  {
+    $results[ $instruction ] = Artisan::call( $instruction );
+  }
+  printf('<pre>%s</pre>', var_export( $results, 1 ) );
+  die;
+});
+
 // Role-based permissions
 Entrust::routeNeedsPermission('home', 'home');
 
