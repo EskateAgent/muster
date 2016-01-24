@@ -90,7 +90,7 @@ class UsersController extends Controller {
       $user->roles()->sync([ $role ]);
     }
 
-    if( isset( $league ) && !$league->user )
+    if( isset( $league ) && !$league->user && $user->hasRole('league') )
     {
       $league->user_id = $user->id;
       $league->save();

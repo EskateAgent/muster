@@ -1,11 +1,11 @@
 <div class="form-group">
   {!! Form::label('name', 'Name:') !!}
-  {!! Form::text('name', null, array('class' => 'form-control') ) !!}
+  {!! Form::text('name', null, ['class' => 'form-control'] ) !!}
 </div>
 
 <div class="form-group">
   {!! Form::label('user_id', 'User:') !!}
-  {!! Form::select('user_id', $league->usersUpForGrabs(), $user_id, array('class' => 'form-control') ) !!}
+  {!! Form::select('user_id', $league->usersUpForGrabs(), $user_id, ['class' => 'form-control'] ) !!}
 </div>
 
 <div class="form-group">
