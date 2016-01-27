@@ -173,7 +173,7 @@ class UsersController extends Controller {
     $remove_league = false;
     if( isset( $input['league_id'] ) )
     {
-      if( !$input['league_id'] )
+      if( !$input['league_id'] || ( $input['role'] < 3 ) )
       {
         $remove_league = true;
       }
@@ -204,7 +204,7 @@ class UsersController extends Controller {
       $league->user_id = $user->id;
       $league->save();
     }
-    else if( $remove_league )
+    else if( $remove_league && $user->league )
     {
       $user->league->user_id = null;
       $user->league->save();

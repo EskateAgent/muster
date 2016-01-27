@@ -66,13 +66,13 @@ class League extends Model {
   public function usersUpForGrabs()
   {
     $leagues = DB::table('leagues')->whereNotNull('user_id')->select('user_id')->get();
-    $user_ids = array();
+    $user_ids = [];
     foreach( $leagues as $league )
     {
       $user_ids[] = $league->user_id;
     }
 
-    $users = array( 0 => '- none -');
+    $users = [ 0 => '- none -'];
 
     $query = DB::table('users')->leftJoin('role_user', 'role_user.user_id', '=', 'users.id' )->whereNotIn('users.id', $user_ids )->where('role_user.role_id', '=', 3 );
     if( !is_null( $this->user_id ) )
@@ -81,10 +81,9 @@ class League extends Model {
     }
 
     $records = $query->orderBy('name', 'asc')->get();
-
     foreach( $records as $user )
     {
-      if( !$user->isDeleted() )
+      if( !$user->deleted_at )
       {
         $users[ $user->id ] = $user->name;
       }
