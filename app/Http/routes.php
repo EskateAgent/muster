@@ -22,6 +22,7 @@ Route::get('users/{user}', ['as' => 'users.show', 'uses' => 'UsersController@sho
 Route::put('users/{user}', ['as' => 'users.update', 'uses' => 'UsersController@update']);
 Route::patch('users/{user}', ['as' => 'users.update', 'uses' => 'UsersController@update']);
 Route::get('users/{user}/edit', ['as' => 'users.edit', 'uses' => 'UsersController@edit']);
+Route::patch('users/{user}/restore', ['as' => 'users.restore', 'uses' => 'UsersController@restore']);
 
 Route::post('leagues', ['as' => 'leagues.store', 'uses' => 'LeaguesController@store']);
 Route::get('leagues', ['as' => 'leagues.index', 'uses' => 'LeaguesController@index']);
@@ -72,6 +73,7 @@ Entrust::routeNeedsPermission('users/store', 'user-create');
 Entrust::routeNeedsPermission('users/*/edit', 'user-edit');
 Entrust::routeNeedsPermission('users/*/update', 'user-edit');
 Entrust::routeNeedsPermission('users/*/delete', 'user-delete');
+Entrust::routeNeedsPermission('users/*/restore', 'user-create');
 
 Entrust::routeNeedsPermission('leagues*', 'league-show');
 Entrust::routeNeedsPermission('leagues/create', 'league-create');
@@ -79,6 +81,7 @@ Entrust::routeNeedsPermission('leagues/store', 'league-create');
 Entrust::routeNeedsPermission('leagues/*/edit', 'league-edit');
 Entrust::routeNeedsPermission('leagues/*/update', 'league-edit');
 Entrust::routeNeedsPermission('leagues/*/delete', 'league-delete');
+Entrust::routeNeedsPermission('leagues/*/restore', 'league-create');
 
 Entrust::routeNeedsPermission('leagues/*/charters*', 'charter-show');
 Entrust::routeNeedsPermission('leagues/*/charters/create', 'charter-create');

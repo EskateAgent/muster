@@ -108,7 +108,7 @@ class UsersController extends Controller {
   /**
    * Display the specified resource.
    *
-   * @param  User $user
+   * @param  int $id
    * @return Response
    */
   public function show( $id )
@@ -126,7 +126,7 @@ class UsersController extends Controller {
   /**
    * Show the form for editing the specified resource.
    *
-   * @param  User $user
+   * @param  int $id
    * @return Response
    */
   public function edit( $id )
@@ -151,7 +151,7 @@ class UsersController extends Controller {
   /**
    * Update the specified resource in storage.
    *
-   * @param  User $user
+   * @param  int $id
    * @param  Request $request
    * @return Response
    */
@@ -217,7 +217,7 @@ class UsersController extends Controller {
   /**
    * Soft delete the specified resource from storage.
    *
-   * @param  User $user
+   * @param  int $id
    * @return Response
    */
   public function delete( $id )
@@ -243,5 +243,26 @@ class UsersController extends Controller {
     $this->dispatch( new LogEventCommand( Auth::user(), 'deleted', $user ) );
 
     return Redirect::route('users.index')->with('message', 'User ' . $user->name . ' has been deleted');
+  }
+
+  /**
+   * Restore the specified resource from having been soft-deleted
+   *
+   * @param  int $id
+   * @return Response
+   */
+  public function restore( $id )
+  {
+    $user = User::onlyTrashed()->where('id', $id )->first();
+
+    if( !Auth::user()->can('user-create') || !$user->isDeleted() )
+    {
+      abort(404);
+    }
+
+    $user->restore();
+    $this->dispatch( new LogEventCommand( Auth::user(), 'restored', $user ) );
+
+    return Redirect::route('users.show', [ $user->id ] )->with('message', 'User has been restored');
   }
 }

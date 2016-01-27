@@ -9,19 +9,25 @@
       @endif
     </h1>
 
-    @if( $user->id != Auth::user()->id && ( Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
-      <form action="/auth/password-reset" method="post">
-        {!! Form::hidden('_token', csrf_token() ) !!}
-        {!! Form::hidden('user_id', $user->id ) !!}
-
-        {!! Form::submit("Reset user's password", ['class' => 'btn btn-warning', ''] ) !!}
-      </form>
-    @endif
-
-    @if( $user->id != Auth::user()->id && ( Auth::user()->hasRole('root') || ( ( Auth::user()->hasRole('staff') || Auth::user()->can('user-delete') ) && !$user->hasRole('root') ) ) )
-      {!! Form::model( $user, ['method' => 'delete', 'route' => ['users.delete', $user->id ] ] ) !!}
-        {!! Form::submit('Delete user', ['class' => 'btn btn-danger', ''] ) !!}
+    @if( $user->isDeleted() && ( Auth::user()->can('user-create') || ( Auth::user()->hasRole('root') ) ) )
+      {!! Form::model( $user, ['method' => 'patch', 'route' => ['users.restore', $user->id ], 'style' => 'display: inline-block;' ] ) !!}
+        {!! Form::submit("Restore this user", ['class' => 'btn btn-success'] ) !!}
       {!! Form::close() !!}
+    @else
+      @if( $user->id != Auth::user()->id && ( Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
+        <form action="/auth/password-reset" method="post">
+          {!! Form::hidden('_token', csrf_token() ) !!}
+          {!! Form::hidden('user_id', $user->id ) !!}
+
+          {!! Form::submit("Reset user's password", ['class' => 'btn btn-warning', ''] ) !!}
+        </form>
+      @endif
+
+      @if( $user->id != Auth::user()->id && ( Auth::user()->hasRole('root') || ( ( Auth::user()->hasRole('staff') || Auth::user()->can('user-delete') ) && !$user->hasRole('root') ) ) )
+        {!! Form::model( $user, ['method' => 'delete', 'route' => ['users.delete', $user->id ] ] ) !!}
+          {!! Form::submit('Delete user', ['class' => 'btn btn-danger', ''] ) !!}
+        {!! Form::close() !!}
+      @endif
     @endif
   </div>
   @if( $user->role() )
