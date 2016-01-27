@@ -10,13 +10,13 @@
     </h1>
   </div>
 
-  @if( !$league->isDeleted() && ( Auth::user()->can('league-delete') || ( Auth::user()->hasRole('root') ) ) )
+  @if( !$league->isDeleted() && Auth::user()->can('league-delete') )
     {!! Form::model( $league, ['method' => 'delete', 'route' => ['leagues.delete', $league->slug ], 'style' => 'display: inline-block;' ] ) !!}
       {!! Form::submit("Delete this league", ['class' => 'btn btn-danger'] ) !!}
     {!! Form::close() !!}
   @endif
 
-  @if( $league->isDeleted() && ( Auth::user()->can('league-create') || ( Auth::user()->hasRole('root') ) ) )
+  @if( $league->isDeleted() && Auth::user()->can('league-create') )
     {!! Form::model( $league, ['method' => 'patch', 'route' => ['leagues.restore', $league->slug ], 'style' => 'display: inline-block;' ] ) !!}
       {!! Form::submit("Restore this league", ['class' => 'btn btn-success'] ) !!}
     {!! Form::close() !!}

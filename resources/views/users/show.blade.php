@@ -9,7 +9,7 @@
       @endif
     </h1>
 
-    @if( $user->isDeleted() && ( Auth::user()->can('user-create') || ( Auth::user()->hasRole('root') ) ) )
+    @if( $user->isDeleted() && Auth::user()->can('user-create') )
       {!! Form::model( $user, ['method' => 'patch', 'route' => ['users.restore', $user->id ], 'style' => 'display: inline-block;' ] ) !!}
         {!! Form::submit("Restore this user", ['class' => 'btn btn-success'] ) !!}
       {!! Form::close() !!}
@@ -23,7 +23,7 @@
         </form>
       @endif
 
-      @if( $user->id != Auth::user()->id && ( Auth::user()->hasRole('root') || ( ( Auth::user()->hasRole('staff') || Auth::user()->can('user-delete') ) && !$user->hasRole('root') ) ) )
+      @if( $user->id != Auth::user()->id && ( Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
         {!! Form::model( $user, ['method' => 'delete', 'route' => ['users.delete', $user->id ] ] ) !!}
           {!! Form::submit('Delete user', ['class' => 'btn btn-danger', ''] ) !!}
         {!! Form::close() !!}
