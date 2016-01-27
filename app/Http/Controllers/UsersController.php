@@ -234,7 +234,7 @@ class UsersController extends Controller {
       abort(404);
     }
 
-    if( !is_null( $user->league_id ) )
+    if( $user->league )
     {
       $user->league->removeUser();
     }
