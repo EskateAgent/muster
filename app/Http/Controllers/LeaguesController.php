@@ -157,8 +157,7 @@ class LeaguesController extends Controller {
 
     if( $remove_user )
     {
-      $league->user_id = null;
-      $league->save();
+      $league->removeUser();
     }
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'updated', $league ) );
@@ -183,8 +182,7 @@ class LeaguesController extends Controller {
 
     if( !is_null( $league->user_id ) )
     {
-      $league->user_id = null;
-      $league->save();
+      $league->removeUser();
     }
 
     $league->delete();

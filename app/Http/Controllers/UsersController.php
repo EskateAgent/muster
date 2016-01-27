@@ -206,8 +206,7 @@ class UsersController extends Controller {
     }
     else if( $remove_league && $user->league )
     {
-      $user->league->user_id = null;
-      $user->league->save();
+      $user->league->removeUser();
     }
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'updated', $user ) );
@@ -237,9 +236,7 @@ class UsersController extends Controller {
 
     if( !is_null( $user->league_id ) )
     {
-      $league = $user->league;
-      $league->user_id = null;
-      $league->save();
+      $user->league->removeUser();
     }
 
     $user->delete();

@@ -101,4 +101,10 @@ class League extends Model {
   {
     return !is_null( $this->deleted_at );
   }
+
+  public function removeUser()
+  {
+    $this->user_id = null;
+    return $this->save();
+  }
 }
