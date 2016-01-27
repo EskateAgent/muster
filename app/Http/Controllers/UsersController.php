@@ -261,6 +261,8 @@ class UsersController extends Controller {
     }
 
     $user->restore();
+    $user->roles()->sync([ 3 ]); // force to be league user
+
     $this->dispatch( new LogEventCommand( Auth::user(), 'restored', $user ) );
 
     return Redirect::route('users.show', [ $user->id ] )->with('message', 'User has been restored');

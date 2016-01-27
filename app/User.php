@@ -51,7 +51,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     return $this->roles()->first();
   }
 
-  public function leaguesUpForGrabs() // naming things is hard
+  public function leaguesUpForGrabs()
   {
     $records = \App\League::whereNull('user_id')->orWhere('user_id', '=', $this->id )->orderBy('name', 'asc')->get();
     $leagues = array( 0 => '- none -');
