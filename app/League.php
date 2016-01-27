@@ -84,7 +84,10 @@ class League extends Model {
 
     foreach( $records as $user )
     {
-      $users[ $user->id ] = $user->name;
+      if( !$user->isDeleted() )
+      {
+        $users[ $user->id ] = $user->name;
+      }
     }
     ksort( $users );
     return $users;

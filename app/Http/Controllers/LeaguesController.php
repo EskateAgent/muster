@@ -146,12 +146,20 @@ class LeaguesController extends Controller {
     $this->validate( $request, $this->rules );
 
     $input = Input::all();
+    $remove_user = false;
     if( isset( $input['user_id'] ) && !$input['user_id'] )
     {
+      $remove_user = true;
       unset( $input['user_id'] );
     }
 
     $league->update( array_except( $input, '_method') );
+
+    if( $remove_user )
+    {
+      $league->user_id = null;
+      $league->save();
+    }
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'updated', $league ) );
 

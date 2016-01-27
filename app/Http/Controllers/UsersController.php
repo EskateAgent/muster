@@ -169,19 +169,28 @@ class UsersController extends Controller {
       abort(404);
     }
 
-    if( $league_id = $request->input('league_id') )
+    $input = Input::all();
+    $remove_league = false;
+    if( isset( $input['league_id'] ) )
     {
-      $league = \App\League::find( $league_id );
-      if( $league->user && ( $league->user_id != $user->id ) )
+      if( !$input['league_id'] )
       {
-        Redirect::route('users.index')->with('message', $league->name . ' already has a user!');
+        $remove_league = true;
+      }
+      else
+      {
+        $league = \App\League::find( $input['league_id'] );
+        if( $league->user && ( $league->user_id != $user->id ) )
+        {
+          Redirect::route('users.index')->with('message', $league->name . ' already has a user!');
+        }
       }
     }
 
     $this->validate( $request, $this->rules );
-    $user->update( array_except( Input::all(), array('_method', 'league_id') ) );
+    $user->update( array_except( $input, ['_method', 'league_id'] ) );
 
-    if( $role = $request->input('role') )
+    if( $role = $input['role'] )
     {
       if( $role < Auth::user()->role()->id )
       {
@@ -194,6 +203,11 @@ class UsersController extends Controller {
     {
       $league->user_id = $user->id;
       $league->save();
+    }
+    else if( $remove_league )
+    {
+      $user->league->user_id = null;
+      $user->league->save();
     }
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'updated', $user ) );

@@ -57,7 +57,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
     $leagues = array( 0 => '- none -');
     foreach( $records as $league )
     {
-      $leagues[ $league->id ] = $league->name;
+      if( !$league->isDeleted() )
+      {
+        $leagues[ $league->id ] = $league->name;
+      }
     }
     return $leagues;
   }
