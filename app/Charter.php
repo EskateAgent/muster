@@ -49,7 +49,7 @@ class Charter extends Model {
 
     foreach( $skaters as $skater )
     {
-      Skater::create( array_merge( $skater, array('charter_id' => $this->id ) ) );
+      Skater::create( array_merge( $skater, ['charter_id' => $this->id ] ) );
     }
   }
 
@@ -60,7 +60,7 @@ class Charter extends Model {
 
   public function types()
   {
-    $charter_types = array();
+    $charter_types = [];
     foreach( \App\CharterType::all() as $charter_type )
     {
       $charter_types[ $charter_type->id ] = $charter_type->name;

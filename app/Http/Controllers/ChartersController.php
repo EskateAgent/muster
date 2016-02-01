@@ -366,7 +366,7 @@ class ChartersController extends Controller {
    */
   protected function processFile( Request $request )
   {
-    $skaters = array();
+    $skaters = [];
     if( $request->hasFile('csv') && $request->file('csv')->isValid() )
     {
       $file = $request->file('csv')->openFile();
@@ -390,15 +390,16 @@ class ChartersController extends Controller {
 
         if( !isset( $name_index, $number_index ) )
         {
-          if( ( array_search('uniform_nbr', $row ) !== false ) && ( array_search('derby_name', $row ) !== false ) )
+          if( ( array_search('uniform_nbr', $row ) !== false ) && ( array_search('derby_name', $row ) !== false ) && ( array_search('legal_name', $row ) !== false ) )
           {
             $name_index = array_search('derby_name', $row );
             $number_index = array_search('uniform_nbr', $row );
+            $legal_name_index = array_search('legal_name', $row );
           }
           continue;
         }
 
-        $skaters[] = array('name' => $row[ $name_index ], 'number' => $row[ $number_index ] );
+        $skaters[] = ['name' => $row[ $name_index ], 'legal_name' => $row[ $legal_name_index ], 'number' => $row[ $number_index ] ];
       }
     }
     return $skaters;

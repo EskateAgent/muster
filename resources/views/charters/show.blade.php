@@ -90,7 +90,8 @@
       <thead>
         <tr>
           <th></th>
-          <th>Name</th>
+          <th>Skate Name</th>
+          <th>Legal Name</th>
           <th>Number</th>
         </tr>
       </thead>
@@ -99,6 +100,7 @@
           <tr>
             <td>{{ $key + 1 }}</td>
             <td>{{ $skater->name }}</td>
+            <td>{{ $skater->legal_name }}</td>
             <td>{{ $skater->number }}</td>
           </tr>
         @endforeach
