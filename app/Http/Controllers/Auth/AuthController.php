@@ -52,13 +52,16 @@ class AuthController extends Controller {
     if( Auth::attempt( $credentials, $request->has('remember') ) )
     {
       $user = Auth::user();
-      if( is_null( $user->last_login ) )
-      {
-        return redirect('auth/password-change');
-      }
+
+      $password_change = is_null( $user->last_login );
 
       $user->last_login = \Carbon\Carbon::now();
       $user->save();
+
+      if( $password_change )
+      {
+        return redirect('auth/password-change');
+      }
 
       return redirect()->intended( $this->redirectPath() );
     }
