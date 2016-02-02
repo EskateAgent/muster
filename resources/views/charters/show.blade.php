@@ -50,7 +50,17 @@
             {!! Form::model( $charter, ['method' => 'PATCH', 'route' => ['leagues.charters.approve', $league->slug, $charter->slug ] ] ) !!}
               <div class="form-group">
                 {!! Form::label('active_from', 'Active From:') !!}
-                {!! Form::date('active_from', \Carbon\Carbon::now()->addDays( $league->approvedCharters( $charter->charter_type_id )->count() ? 30 : 0 ), array('class' => 'form-control') ) !!}
+                <?php
+                if( $charter->effective_from )
+                {
+                  $active_from = $charter->effective_from;
+                }
+                else
+                {
+                  $active_from = \Carbon\Carbon::now()->addDays( $league->approvedCharters( $charter->charter_type_id )->count() ? 30 : 0 );
+                }
+                ?>
+                {!! Form::date('active_from', $active_from, ['class' => 'form-control'] ) !!}
               </div>
               <div class="form-group">
                 {!! Form::submit('Approve', ['class' => 'btn btn-success'] ) !!}
@@ -67,7 +77,7 @@
               @endif
               <div class="form-group">
                 {!! Form::label('rejection_reason', 'Give a reason for rejection:') !!}
-                {!! Form::text('rejection_reason', null, array('class' => 'form-control') ) !!}
+                {!! Form::text('rejection_reason', null, ['class' => 'form-control'] ) !!}
               </div>
               <div class="form-group">
                 {!! Form::submit('Reject', ['class' => 'btn btn-danger'] ) !!}

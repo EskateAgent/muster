@@ -10,7 +10,7 @@ class Charter extends Model {
 
   protected $guarded = ['id'];
 
-  protected $dates = ['approved_at', 'approval_requested_at', 'active_from', 'deleted_at'];
+  protected $dates = ['approved_at', 'approval_requested_at', 'active_from', 'deleted_at', 'effective_from'];
 
   public function league()
   {
@@ -32,9 +32,9 @@ class Charter extends Model {
     return $this->hasMany('App\Skater')->limit(20)->orderBy('number');
   }
 
-  public function replaceSkaters( array $skaters )
+  public function replace( array $content )
   {
-    if( !count( $skaters ) )
+    if( !( isset( $content['skaters'] ) && count( $content['skaters'] ) ) )
     {
       throw new Exception('No skaters found!');
     }
@@ -47,15 +47,21 @@ class Charter extends Model {
       }
     }
 
-    foreach( $skaters as $skater )
+    foreach( $content['skaters'] as $skater )
     {
       Skater::create( array_merge( $skater, ['charter_id' => $this->id ] ) );
+    }
+
+    if( isset( $content['effective_from'] ) )
+    {
+      $this->effective_from = \Carbon\Carbon::parse( $content['effective_from'] );
+      $this->save();
     }
   }
 
   public function canonicalUrl()
   {
-    return $this->league->canonicalUrl() . '/charters/' . $this->slug;
+    return $this->league()->canonicalUrl() . '/charters/' . $this->slug;
   }
 
   public function types()

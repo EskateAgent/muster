@@ -70,7 +70,7 @@ class ChartersController extends Controller {
 
     try
     {
-      $charter->replaceSkaters( $this->processFile( $request ) );
+      $charter->replace( $this->processFile( $request ) );
     }
     catch( Exception $e )
     {
@@ -174,7 +174,7 @@ class ChartersController extends Controller {
 
     try
     {
-      $charter->replaceSkaters( $this->processFile( $request ) );
+      $charter->replace( $this->processFile( $request ) );
     }
     catch( Exception $e )
     {
@@ -256,10 +256,10 @@ class ChartersController extends Controller {
     $charter->save();
 
     $user = Auth::user();
-    \Mail::send('emails.charter_submitted', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user ){
+    \Mail::send('emails.charter_submitted', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user, $charter ){
       $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Submitted for Approval');
     });
-    \Mail::send('emails.charter_submitted', ['name' => env('MAIL_FROM_NAME'), 'charter' => $charter ], function( $message ){
+    \Mail::send('emails.charter_submitted', ['name' => env('MAIL_FROM_NAME'), 'charter' => $charter ], function( $message )use( $charter ){
       $message->to( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME') )->subject('Charter ' . $charter->name . ' Submitted for Approval');
     });
 
@@ -303,7 +303,7 @@ class ChartersController extends Controller {
     if( $league->user_id )
     {
       $user = $league->user;
-      \Mail::send('emails.charter_approved', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user ){
+      \Mail::send('emails.charter_approved', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user, $charter ){
         $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Approved');
       });
     }
@@ -366,7 +366,11 @@ class ChartersController extends Controller {
    */
   protected function processFile( Request $request )
   {
-    $skaters = [];
+    $content = [
+      'effective_from' => null,
+      'skaters'        => []
+    ];
+
     if( $request->hasFile('csv') && $request->file('csv')->isValid() )
     {
       $file = $request->file('csv')->openFile();
@@ -378,12 +382,23 @@ class ChartersController extends Controller {
       {
         $i++;
 
-        if( count( $row ) < 2 )
+        $count = count( $row );
+
+        if( !$count )
         {
           continue;
         }
 
-        if( ( $i > 50 ) || ( count( $skaters ) > 20 ) )
+        if( $count < 3 )
+        {
+          if( is_null( $content['effective_from'] ) && ( $row[0] == 'effective_date') && isset( $row[1] ) && $row[1] )
+          {
+            $content['effective_from'] = $row[1];
+          }
+          continue;
+        }
+
+        if( ( $i > 50 ) || ( count( $content['skaters'] ) > 20 ) )
         {
           throw new Exception('Looks like something went funny with your file. Please download a new copy of the template and try again.');
         }
@@ -399,9 +414,10 @@ class ChartersController extends Controller {
           continue;
         }
 
-        $skaters[] = ['name' => $row[ $name_index ], 'legal_name' => $row[ $legal_name_index ], 'number' => $row[ $number_index ] ];
+        $content['skaters'][] = ['name' => $row[ $name_index ], 'legal_name' => $row[ $legal_name_index ], 'number' => $row[ $number_index ] ];
       }
     }
-    return $skaters;
+
+    return $content;
   }
 }
