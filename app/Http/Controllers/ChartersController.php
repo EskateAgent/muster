@@ -348,7 +348,7 @@ class ChartersController extends Controller {
     if( $league->user_id )
     {
       $user = $league->user;
-      \Mail::send('emails.charter_rejected', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user ){
+      \Mail::send('emails.charter_rejected', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user, $charter ){
         $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Could Not Be Approved');
       });
     }
