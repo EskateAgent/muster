@@ -341,7 +341,13 @@ class ChartersController extends Controller {
       return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has not been submitted for approval!');
     }
 
-    $charter->update( array_except( Input::all(), '_method') );
+    $input = array_except( Input::all(), '_method');
+    if( !( isset( $input['rejection_reason'] ) && $input['rejection_reason'] ) )
+    {
+      return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('error', 'You must provide a reason to reject charter ' . $charter->name . '!');
+    }
+
+    $charter->update( $input );
     $charter->approval_requested_at = null;
     $charter->save();
 
