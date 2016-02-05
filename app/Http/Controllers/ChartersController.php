@@ -66,7 +66,7 @@ class ChartersController extends Controller {
 
     $this->validate( $request, $this->rules );
 
-    $charter = Charter::create( array_merge( Input::all(), ['league_id' => $league->id, 'name' => \Carbon\Carbon::now()->toDateString() ] ) );
+    $charter = Charter::create( ['league_id' => $league->id ] + array_merge(['name' => $league->generateNextCharterName() ], Input::all() ) );
 
     try
     {
@@ -373,6 +373,7 @@ class ChartersController extends Controller {
   protected function processFile( Request $request )
   {
     $content = [
+      'name'           => null,
       'effective_from' => null,
       'skaters'        => []
     ];
@@ -397,9 +398,13 @@ class ChartersController extends Controller {
 
         if( $count < 3 )
         {
-          if( is_null( $content['effective_from'] ) && ( $row[0] == 'effective_date') && isset( $row[1] ) && $row[1] )
+          if( is_null( $content['name'] ) && ( $row[0] == 'roster_id') && isset( $row[1] ) && $row[1] )
           {
-            $content['effective_from'] = $row[1];
+            $content['name'] = trim( $row[1] );
+          }
+          elseif( is_null( $content['effective_from'] ) && ( $row[0] == 'effective_date') && isset( $row[1] ) && $row[1] )
+          {
+            $content['effective_from'] = trim( $row[1] );
           }
           continue;
         }

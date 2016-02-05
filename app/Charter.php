@@ -52,11 +52,17 @@ class Charter extends Model {
       Skater::create( array_merge( $skater, ['charter_id' => $this->id ] ) );
     }
 
+    if( isset( $content['name'] ) )
+    {
+      $this->name = $content['name'];
+    }
+
     if( isset( $content['effective_from'] ) )
     {
       $this->effective_from = \Carbon\Carbon::parse( $content['effective_from'] );
-      $this->save();
     }
+
+    $this->save();
   }
 
   public function canonicalUrl()

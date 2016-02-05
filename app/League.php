@@ -63,6 +63,16 @@ class League extends Model {
     return $this->approvedCharters( $type_id )->where('active_from', '>', Carbon::now() )->first();
   }
 
+  public function countAllCharters()
+  {
+    return \App\Charter::where('league_id', '=', $this->id )->count();
+  }
+
+  public function generateNextCharterName()
+  {
+    return date('Y') . '-' . strtoupper( explode(' ', $this->name )[0] ) . sprintf("%'.04d", $this->countAllCharters() + 1 );
+  }
+
   public function usersUpForGrabs()
   {
     $leagues = DB::table('leagues')->whereNotNull('user_id')->select('user_id')->get();
