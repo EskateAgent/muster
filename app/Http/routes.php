@@ -64,6 +64,12 @@ Route::get('clear-cache', function(){
   die;
 });
 
+Route::get('migrate', function(){
+  $result = Artisan::call('migrate');
+  printf('<pre>%s</pre>', var_export( $result, 1 ) );
+  die;
+});
+
 // Role-based permissions
 Entrust::routeNeedsPermission('home', 'home');
 
