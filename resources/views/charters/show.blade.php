@@ -31,7 +31,8 @@
   @endif
 
   @if( $charter->approval_requested_at && !$charter->active_from )
-    <p>Charter has been submitted for approval</p>
+
+    <p>Charter was submitted for approval <span class="time" title="{{ $charter->approval_requested_at->toDateString() }}">{{ $charter->approval_requested_at->diffForHumans() }}</span>.</p>
 
     @if( Auth::user()->can('charter-approve') || Auth::user()->can('charter-reject') )
       <ul class="nav nav-tabs" role="tablist">

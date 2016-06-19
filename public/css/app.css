@@ -1,6 +1,6 @@
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
-  font-family: sans-serif;
+  font-family: 'NobileRegular', sans-serif;
   -ms-text-size-adjust: 100%;
   -webkit-text-size-adjust: 100%;
 }
@@ -23,9 +23,26 @@ summary {
   display: block;
 }
 footer {
-  border-top: 1px solid #ddd;
+  border-top: 5px solid #ea2f2f !important;
   padding: 8px 0 1px;
-  background: #eee;
+  background: #ddd;
+}
+footer h3 { margin: 0; }
+footer h3 a {
+  color: #000;
+  display: block;
+  text-align: right;
+  padding: 10px 80px 10px 0;
+  margin: 4px 10px 10px 0;
+  background: url(/images/footer-logo.png) no-repeat right;
+  background-size: contain;
+  text-decoration: none;
+}
+footer h3 a:active,
+footer h3 a:focus,
+footer h3 a:hover { color: #000; }
+footer h3 {
+  font-family: 'ChunkFiveRegular';
 }
 audio,
 canvas,
@@ -62,6 +79,7 @@ dfn {
 h1 {
   font-size: 2em;
   margin: 0.67em 0;
+  font-family: 'TitilliumText22LRegular' !important;
 }
 mark {
   background: #ff0;
@@ -884,11 +902,11 @@ html {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 body {
-  font-family: "Roboto", Helvetica, Arial, sans-serif;
+  font-family: "NobileRegular", sans-serif;
   font-size: 14px;
   line-height: 1.42857143;
-  color: #333333;
-  background-color: #ffffff;
+  color: #000;
+  background-color: #fff;
 }
 input,
 button,
@@ -899,13 +917,13 @@ textarea {
   line-height: inherit;
 }
 a {
-  color: #337ab7;
-  text-decoration: none;
+  color: #666;
+  text-decoration: underline;
 }
 a:hover,
 a:focus {
-  color: #23527c;
-  text-decoration: underline;
+  color: #777;
+  text-decoration: none;
 }
 a:focus {
   outline: thin dotted;
@@ -1402,7 +1420,7 @@ pre code {
   padding-right: 15px;
 }
 .container[role="main"] {
-  padding-top: 50px;
+  padding: 50px 0 60px;
 }
 .row {
   margin-left: -15px;
@@ -2746,6 +2764,7 @@ select[multiple].form-group-lg .form-control {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  text-decoration: none;
 }
 .btn:focus,
 .btn:active:focus,
@@ -3171,12 +3190,10 @@ tbody.collapse.in {
   list-style: none;
   font-size: 14px;
   text-align: left;
-  background-color: #ffffff;
-  border: 1px solid #cccccc;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 4px;
+  background-color: #ea2f2f;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
   background-clip: padding-box;
+  border: 0;
 }
 .dropdown-menu.pull-right {
   right: 0;
@@ -3190,18 +3207,21 @@ tbody.collapse.in {
 }
 .dropdown-menu > li > a {
   display: block;
-  padding: 3px 20px;
+  padding: 7px 20px;
   clear: both;
   font-weight: normal;
   line-height: 1.42857143;
-  color: #333333;
+  color: #fff;
   white-space: nowrap;
+  font-family: 'NobileRegular';
+  text-decoration: none;
 }
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
   text-decoration: none;
-  color: #262626;
-  background-color: #f5f5f5;
+  color: #fff;
+  background-color: #d91e1e;
+  background-image: none;
 }
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:hover,
@@ -3613,11 +3633,15 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   position: relative;
   display: block;
   padding: 10px 15px;
+  font-family: 'NobileRegular';
+  color: #000;
+  text-decoration: none;
 }
 .nav > li > a:hover,
 .nav > li > a:focus {
   text-decoration: none;
-  background-color: #eeeeee;
+  background-color: #ea2f2f;
+  color: #fff;
 }
 .nav > li.disabled > a {
   color: #777777;
@@ -3632,8 +3656,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav .open > a,
 .nav .open > a:hover,
 .nav .open > a:focus {
-  background-color: #eeeeee;
-  border-color: #337ab7;
+  background-color: #ea2f2f;
+  border: 0;
+  color: #fff;
 }
 .nav .nav-divider {
   height: 1px;
@@ -3668,6 +3693,9 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   border: 1px solid #dddddd;
   border-bottom-color: transparent;
   cursor: default;
+}
+.nav-tabs > li.empty {
+  opacity: 0.5;
 }
 .nav-tabs.nav-justified {
   width: 100%;
@@ -3798,7 +3826,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   position: relative;
   min-height: 50px;
   margin-bottom: 20px;
-  border: 1px solid transparent;
+  border-bottom: 5px solid #01447b;
+  background: #ededed;
 }
 @media (min-width: 768px) {
   .navbar {
@@ -3894,12 +3923,10 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-fixed-top {
   top: 0;
-  border-width: 0 0 1px;
 }
 .navbar-fixed-bottom {
   bottom: 0;
   margin-bottom: 0;
-  border-width: 1px 0 0;
 }
 .navbar-brand {
   float: left;
@@ -3907,10 +3934,15 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   font-size: 18px;
   line-height: 20px;
   height: 50px;
+  font-family: 'NobileRegular';
+  color: #000;
+  text-decoration: none;
 }
 .navbar-brand:hover,
 .navbar-brand:focus {
   text-decoration: none;
+  color: #fff;
+  background-color: #ea2f2f;
 }
 .navbar-brand > img {
   display: block;

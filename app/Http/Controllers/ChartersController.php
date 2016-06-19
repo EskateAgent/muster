@@ -31,14 +31,14 @@ class ChartersController extends Controller {
   {
     $league = League::where('slug', $league )->first();
 
-    if( !$league->id )
+    if( !$league )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
     }
 
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'You cannot create a charter for this league.');
     }
 
     return view('charters.create', compact('league') );
@@ -54,14 +54,14 @@ class ChartersController extends Controller {
   {
     $league = League::where('slug', $league )->first();
 
-    if( !$league->id )
+    if( !$league )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
     }
 
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'You cannot create a charter for this league.');
     }
 
     $this->validate( $request, $this->rules );
@@ -93,26 +93,21 @@ class ChartersController extends Controller {
   {
     $league = League::withTrashed()->where('slug', $league )->first();
 
-    if( $league->isDeleted() )
+    if( !$league )
     {
-      return Redirect::route('leagues.show', $league->slug )->with('message', 'League has been deleted, charters can no longer be viewed!');
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
     }
 
-    if( !$league->id )
+    if( $league->isDeleted() )
     {
-      abort(404);
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'League has been deleted, charters can no longer be viewed.');
     }
 
     $charter = Charter::withTrashed()->where('slug', $charter )->where('league_id', $league->id )->first();
 
-    if( !( ( $league->currentCharter() && ( $league->currentCharter()->id == $charter->id ) ) || ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('staff') || Auth::user()->hasRole('root') ) )
+    if( ( $charter->isDeleted() && !Auth::user()->can('charter-delete') ) || !( ( $league->currentCharter() && ( $league->currentCharter()->id == $charter->id ) ) || ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('staff') || Auth::user()->hasRole('root') ) )
     {
-      abort(404);
-    }
-
-    if( $charter->isDeleted() && !Auth::user()->can('charter-delete') )
-    {
-      abort(404);
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'Charter could not be found.');
     }
 
     return view('charters.show', compact('league', 'charter') );
@@ -129,14 +124,19 @@ class ChartersController extends Controller {
   {
     $league = League::where('slug', $league )->first();
 
-    if( !$league->id )
+    if( !$league )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
+    }
+
+    if( $league->isDeleted() )
+    {
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'League has been deleted, charters can no longer be edited.');
     }
 
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      abort(404);
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'You cannot edit this charter.');
     }
 
     $charter = Charter::where('slug', $charter )->where('league_id', $league->id )->first();
@@ -156,14 +156,19 @@ class ChartersController extends Controller {
   {
     $league = League::where('slug', $league )->first();
 
-    if( !$league->id )
+    if( !$league )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
+    }
+
+    if( $league->isDeleted() )
+    {
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'League has been deleted, charters can no longer be edited.');
     }
 
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      abort(404);
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'You cannot edit this charter.');
     }
 
     $charter = Charter::where('slug', $charter )->where('league_id', $league->id )->first();
@@ -196,21 +201,26 @@ class ChartersController extends Controller {
   {
     $league = League::where('slug', $league )->first();
 
-    if( !$league->id )
+    if( !$league )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
+    }
+
+    if( $league->isDeleted() )
+    {
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'League has been deleted, charters can no longer be deleted.');
     }
 
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      abort(404);
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'You cannot delete this charter.');
     }
 
     $charter = Charter::where('slug', $charter )->where('league_id', $league->id )->first();
 
     if( ( $charter->isDeleted() || $charter->approval_requested_at ) && !Auth::user()->hasRole('root') )
     {
-      abort(404);
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'You cannot delete this charter.');
     }
 
     $charter->delete();
@@ -230,14 +240,19 @@ class ChartersController extends Controller {
   {
     $league = League::whereSlug( $league )->first();
 
-    if( !$league->id )
+    if( !$league )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
+    }
+
+    if( $league->isDeleted() )
+    {
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'League has been deleted, you can no longer request approval for charters.');
     }
 
     if( !( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') ) )
     {
-      abort(404);
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'You cannot request approval for this charter.');
     }
 
     $charter = Charter::whereLeagueId( $league->id )->whereSlug( $charter )->first();
@@ -279,9 +294,14 @@ class ChartersController extends Controller {
   {
     $league = League::whereSlug( $league )->first();
 
-    if( !$league->id )
+    if( !$league )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
+    }
+
+    if( $league->isDeleted() )
+    {
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'League has been deleted, charters can no longer be approved.');
     }
 
     $charter = Charter::whereLeagueId( $league->id )->whereSlug( $charter )->first();
@@ -324,9 +344,14 @@ class ChartersController extends Controller {
   {
     $league = League::whereSlug( $league )->first();
 
-    if( !$league->id )
+    if( !$league )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
+    }
+
+    if( $league->isDeleted() )
+    {
+      return Redirect::route('leagues.show', $league->slug )->with('error', 'League has been deleted, charters can no longer be rejected.');
     }
 
     $charter = Charter::whereLeagueId( $league->id )->whereSlug( $charter )->first();

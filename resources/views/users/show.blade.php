@@ -4,6 +4,7 @@
   <div class="page-header {{ $user->isDeleted() ? 'deleted' : '' }}">
     <h1>
       {{ $user->name }}
+      {!! Auth::user()->id == $user->id ? '<small>(you)</small>' : '' !!}
       @if( !$user->isDeleted() && Auth::user()->can('user-edit') && ( ( Auth::user()->id == $user->id ) || Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
         <small><a href="{{ route('users.edit', [ $user->id ] ) }}">edit</a></small>
       @endif

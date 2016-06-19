@@ -63,9 +63,14 @@ class League extends Model {
     return $this->approvedCharters( $type_id )->where('active_from', '>', Carbon::now() )->first();
   }
 
-  public function countAllCharters()
+  public function countAllCharters( $type_id = null )
   {
-    return \App\Charter::where('league_id', '=', $this->id )->count();
+    $query = \App\Charter::where('league_id', '=', $this->id );
+    if( $type_id )
+    {
+      $query->where('charter_type_id', '=', $type_id );
+    }
+    return $query->count();
   }
 
   public function generateNextCharterName()

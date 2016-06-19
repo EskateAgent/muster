@@ -1,0 +1,43 @@
+@font-face {
+  font-family: 'ChunkFiveRegular';
+  src: url('/fonts/chunkfive-regular.eot');
+  src: url('/fonts/chunkfive-regular.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/chunkfive-regular.woff') format('woff'),
+       url('/fonts/chunkfive-regular.ttf') format('truetype'),
+       url('/fonts/chunkfive-regular.svg#ChunkFiveRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TitilliumText22LRegular';
+  src: url('/fonts/titilliumText22L003-regular.eot');
+  src: url('/fonts/titilliumText22L003-regular.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/titilliumText22L003-regular.woff') format('woff'),
+       url('/fonts/titilliumText22L003-regular.ttf') format('truetype'),
+       url('/fonts/titilliumText22L003-regular.svg#TitilliumText22LRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TitilliumText22LMedium';
+  src: url('/fonts/titilliumText22L004-regular.eot');
+  src: url('/fonts/titilliumText22L004-regular.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/titilliumText22L004-regular.woff') format('woff'),
+       url('/fonts/titilliumText22L004-regular.ttf') format('truetype'),
+       url('/fonts/titilliumText22L004-regular.svg#TitilliumText22LMedium') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'NobileRegular';
+  src: url('/fonts/nobile-regular.eot');
+  src: url('/fonts/nobile-regular.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/nobile-regular.woff') format('woff'),
+       url('/fonts/nobile-regular.ttf') format('truetype'),
+       url('/fonts/nobile-regular.svg#NobileRegular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}

@@ -4,6 +4,7 @@
   <div class="page-header {{ $league->isDeleted() ? 'deleted' : '' }}">
     <h1>
       {{ $league->name }}
+      {!! Auth::user()->id == $league->user_id ? '<small>(your league)</small>' : '' !!}
       @if( !$league->isDeleted() && Auth::user()->can('league-edit') && ( ( Auth::user()->id == $league->user_id ) || Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
         <small><a href="{{ route('leagues.edit', [ $league->slug ] ) }}">edit</a></small>
       @endif
@@ -36,7 +37,7 @@
   @if( $league->charters->count() )
     <ul class="nav nav-tabs" role="tablist">
       @foreach( $charter_types as $key => $type )
-        <li class="{{ $key == 0 ? 'active' : '' }}"><a href="#{{ strtolower( $type->name ) }}" role="tab" data-toggle="tab">{{ $type->name }}</a></li>
+        <li class="{{ $key == 0 ? 'active' : '' }} {{ $league->countAllCharters( $type->id ) ? '' : 'empty' }}" title="{{ $league->countAllCharters( $type->id ) ? '' : '(no charters of this type are present)' }}"><a href="#{{ strtolower( $type->name ) }}" role="tab" data-toggle="tab">{{ $type->name }}</a></li>
       @endforeach
     </ul>
 

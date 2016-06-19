@@ -36,7 +36,7 @@ class LeaguesController extends Controller {
   {
     if( !Auth::user()->can('league-archived') )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'Page could not be found.');
     }
 
     $leagues = League::onlyTrashed()->get();
@@ -86,9 +86,9 @@ class LeaguesController extends Controller {
   {
     $league = League::withTrashed()->where('slug', $slug )->first();
 
-    if( !$league->id || ( $league->isDeleted() && !Auth::user()->can('league-delete') ) )
+    if( !$league || ( $league->isDeleted() && !Auth::user()->can('league-delete') ) )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
     }
 
     $charter_types = \App\CharterType::all();
@@ -105,16 +105,16 @@ class LeaguesController extends Controller {
   {
     $league = League::where('slug', $slug )->first();
 
-    if( !$league->id )
+    if( !$league )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
     }
 
     $user_id = !is_null( $league->user_id ) ? $league->user_id : 0;
 
     if( !( ( Auth::user()->id == $user_id ) || Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'You cannot edit this league.');
     }
 
     return view('leagues.edit', compact('league', 'user_id') );
@@ -131,16 +131,16 @@ class LeaguesController extends Controller {
   {
     $league = League::where('slug', $slug )->first();
 
-    if( !$league->id )
+    if( !$league )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
     }
 
     $user_id = !is_null( $league->user_id ) ? $league->user_id : 0;
 
     if( !( ( Auth::user()->id == $user_id ) || Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'You cannot edit this league.');
     }
 
     $this->validate( $request, $this->rules );
@@ -175,9 +175,14 @@ class LeaguesController extends Controller {
   {
     $league = League::where('slug', $slug )->first();
 
-    if( !$league->id || !Auth::user()->can('league-delete') || $league->isDeleted() )
+    if( !$league || $league->isDeleted() )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
+    }
+
+    if( !Auth::user()->can('league-delete') )
+    {
+      return Redirect::route('leagues.index')->with('error', 'You cannot delete this league.');
     }
 
     if( !is_null( $league->user_id ) )
@@ -201,9 +206,14 @@ class LeaguesController extends Controller {
   {
     $league = League::onlyTrashed()->whereSlug( $slug )->first();
 
-    if( !$league->id || !Auth::user()->can('league-create') || !$league->isDeleted() )
+    if( !$league || !$league->isDeleted() )
     {
-      abort(404);
+      return Redirect::route('leagues.index')->with('error', 'League could not be found.');
+    }
+
+    if( !Auth::user()->can('league-create') )
+    {
+      return Redirect::route('leagues.index')->with('error', 'You cannot restore this league.');
     }
 
     $league->restore();

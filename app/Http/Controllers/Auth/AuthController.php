@@ -109,7 +109,7 @@ class AuthController extends Controller {
 
     if( !( Auth::user()->hasRole('root') || Auth::user()->hasRole('staff') ) )
     {
-      abort(404);
+      return Redirect::route('users.index')->with('error', 'You cannot reset the password for this user.');
     }
 
     $password = User::generateTemporaryPassword();

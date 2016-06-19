@@ -36,7 +36,7 @@ class UsersController extends Controller {
   {
     if( !Auth::user()->can('user-archived') )
     {
-      abort(404);
+      return Redirect::route('users.index')->with('error', 'Page could not be found.');
     }
 
     $users = User::onlyTrashed()->get();
@@ -69,7 +69,7 @@ class UsersController extends Controller {
       $league = \App\League::find( $league_id );
       if( $league->user && ( $league->user_id != $user->id ) )
       {
-        Redirect::route('users.index')->with('message', $league->name . ' already has a user!');
+        return Redirect::route('users.index')->with('error', $league->name . ' already has a user!');
       }
     }
 
@@ -85,7 +85,7 @@ class UsersController extends Controller {
     {
       if( $role < Auth::user()->role()->id )
       {
-        abort(404);
+        return Redirect::route('users.index')->with('error', 'You cannot create a user with these permissions.');
       }
       $user->roles()->sync([ $role ]);
     }
@@ -115,9 +115,9 @@ class UsersController extends Controller {
   {
     $user = User::withTrashed()->where('id', $id )->first();
 
-    if( !$user->id || ( $user->isDeleted() && !Auth::user()->can('user-delete') ) )
+    if( !$user || ( $user->isDeleted() && !Auth::user()->can('user-delete') ) )
     {
-      abort(404);
+      return Redirect::route('users.index')->with('error', 'User could not be found.');
     }
 
     return view('users.show', compact('user') );
@@ -133,14 +133,14 @@ class UsersController extends Controller {
   {
     $user = User::where('id', $id )->first();
 
-    if( !$user->id )
+    if( !$user )
     {
-      abort(404);
+      return Redirect::route('users.index')->with('error', 'User could not be found');
     }
 
     if( !( ( Auth::user()->id == $user->id ) || Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
     {
-      abort(404);
+      return Redirect::route('users.index')->with('error', 'You cannot edit this user.');
     }
 
     $league_id = !is_null( $user->league ) ? $user->league->id : 0;
@@ -159,14 +159,14 @@ class UsersController extends Controller {
   {
     $user = User::where('id', $id )->first();
 
-    if( !$user->id )
+    if( !$user )
     {
-      abort(404);
+      return Redirect::route('users.index')->with('error', 'User could not be found');
     }
 
     if( !( ( Auth::user()->id == $user->id ) || Auth::user()->hasRole('root') || ( Auth::user()->hasRole('staff') && !$user->hasRole('root') ) ) )
     {
-      abort(404);
+      return Redirect::route('users.index')->with('error', 'You cannot edit this user.');
     }
 
     $input = Input::all();
@@ -194,7 +194,7 @@ class UsersController extends Controller {
     {
       if( $role < Auth::user()->role()->id )
       {
-        abort(404);
+        return Redirect::route('users.index')->with('error', 'You cannot edit this user.');
       }
       $user->roles()->sync([ $role ]);
     }
@@ -224,14 +224,14 @@ class UsersController extends Controller {
   {
     $user = User::where('id', $id )->first();
 
-    if( !$user->id || $user->deleted_at )
+    if( !$user || $user->isDeleted() )
     {
-      abort(404);
+      return Redirect::route('users.index')->with('error', 'User could not be found.');
     }
 
     if( ( Auth::user()->hasRole('staff') && $user->hasRole('root') ) || Auth::user()->hasRole('league') )
     {
-      abort(404);
+      return Redirect::route('users.index')->with('error', 'You cannot delete this user.');
     }
 
     if( $user->league )
@@ -257,7 +257,7 @@ class UsersController extends Controller {
 
     if( !Auth::user()->can('user-create') || !$user->isDeleted() )
     {
-      abort(404);
+      return Redirect::route('users.index')->with('error', 'You cannot restore this user.');
     }
 
     $user->restore();
