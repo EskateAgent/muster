@@ -119,11 +119,17 @@ class AuthController extends Controller {
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'reset-password', $user ) );
 
-    \Mail::send('emails.password-reset', ['name' => $user->name, 'password' => $password ], function( $message )use( $user ){
-      $message->to( $user->email, $user->name )->subject('Your Password Has Been Reset');
-    });
-
-    return Redirect::route('users.show', $user->id )->with('message', "User's password has been reset and emailed to them.");
+    try
+    {
+      \Mail::send('emails.password-reset', ['name' => $user->name, 'password' => $password ], function( $message )use( $user ){
+        $message->to( $user->email, $user->name )->subject('Your Password Has Been Reset');
+      });
+      return Redirect::route('users.show', $user->id )->with('message', "User's password has been reset and emailed to them.");
+    }
+    catch( Exception $e )
+    {
+      return Redirect::route('users.show', $user->id )->with('error', "User's password has been reset, but an error occurred when emailing it to the user.");
+    }
   }
 
   /**

@@ -271,14 +271,22 @@ class ChartersController extends Controller {
     $charter->save();
 
     $user = Auth::user();
-    \Mail::send('emails.charter_submitted', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user, $charter ){
-      $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Submitted for Approval');
-    });
-    \Mail::send('emails.charter_submitted', ['name' => env('MAIL_FROM_NAME'), 'charter' => $charter ], function( $message )use( $charter ){
-      $message->to( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME') )->subject('Charter ' . $charter->name . ' Submitted for Approval');
-    });
 
-    $this->dispatch( new LogEventCommand( Auth::user(), 'requested-approval', $charter ) );
+    $this->dispatch( new LogEventCommand( $user, 'requested-approval', $charter ) );
+
+    try
+    {
+      \Mail::send('emails.charter_submitted', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user, $charter ){
+        $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Submitted for Approval');
+      });
+      \Mail::send('emails.charter_submitted', ['name' => env('MAIL_FROM_NAME'), 'charter' => $charter ], function( $message )use( $charter ){
+        $message->to( env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME') )->subject('Charter ' . $charter->name . ' Submitted for Approval');
+      });
+    }
+    catch( Exception $e )
+    {
+      // don't tell the user we had problems sending email
+    }
 
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has been submitted for approval');
   }
@@ -320,15 +328,22 @@ class ChartersController extends Controller {
     $charter->approved_at = \Carbon\Carbon::now();
     $charter->save();
 
+    $this->dispatch( new LogEventCommand( Auth::user(), 'approved', $charter ) );
+
     if( $league->user_id )
     {
-      $user = $league->user;
-      \Mail::send('emails.charter_approved', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user, $charter ){
-        $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Approved');
-      });
+      try
+      {
+        $user = $league->user;
+        \Mail::send('emails.charter_approved', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user, $charter ){
+          $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Approved');
+        });
+      }
+      catch( Exception $e )
+      {
+        return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('error', 'Charter ' . $charter->name . ' has been approved, but there was a problem notifying the user via email.');
+      }
     }
-
-    $this->dispatch( new LogEventCommand( Auth::user(), 'approved', $charter ) );
 
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has been approved');
   }
@@ -376,15 +391,22 @@ class ChartersController extends Controller {
     $charter->approval_requested_at = null;
     $charter->save();
 
+    $this->dispatch( new LogEventCommand( Auth::user(), 'rejected', $charter ) );
+
     if( $league->user_id )
     {
-      $user = $league->user;
-      \Mail::send('emails.charter_rejected', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user, $charter ){
-        $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Could Not Be Approved');
-      });
+      try
+      {
+        $user = $league->user;
+        \Mail::send('emails.charter_rejected', ['name' => $user->name, 'charter' => $charter ], function( $message )use( $user, $charter ){
+          $message->to( $user->email, $user->name )->subject('Charter ' . $charter->name . ' Could Not Be Approved');
+        });
+      }
+      catch( Exception $e )
+      {
+        return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('error', 'Charter ' . $charter->name . ' has been rejected, and there was a problem notifying the user by email!');
+      }
     }
-
-    $this->dispatch( new LogEventCommand( Auth::user(), 'rejected', $charter ) );
 
     return Redirect::route('leagues.charters.show', [ $league->slug, $charter->slug ] )->with('message', 'Charter ' . $charter->name . ' has been rejected!');
   }

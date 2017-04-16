@@ -98,11 +98,17 @@ class UsersController extends Controller {
 
     $this->dispatch( new LogEventCommand( Auth::user(), 'stored', $user ) );
 
-    \Mail::send('emails.welcome', ['name' => $user->name, 'password' => $password ], function( $message )use( $user ){
-      $message->to( $user->email, $user->name )->subject('Welcome!');
-    });
-
-    return Redirect::route('users.show', $user->id )->with('message', 'User has been created');
+    try
+    {
+      \Mail::send('emails.welcome', ['name' => $user->name, 'password' => $password ], function( $message )use( $user ){
+        $message->to( $user->email, $user->name )->subject('Welcome!');
+      });
+      return Redirect::route('users.show', $user->id )->with('message', 'User has been created');
+    }
+    catch( Exception $e )
+    {
+      return Redirect::route('users.show', $user->id )->with('error', 'User has been created, but there was a problem emailing the user with their password.');
+    }
   }
 
   /**
